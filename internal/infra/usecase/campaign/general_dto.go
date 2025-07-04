@@ -1,9 +1,9 @@
 package campaign
 
 import (
+	"github.com/henriquemarlon/shoal/internal/domain/entity"
+	"github.com/henriquemarlon/shoal/pkg/custom_type"
 	"github.com/holiman/uint256"
-	"github.com/tribeshq/tribes/internal/domain/entity"
-	"github.com/tribeshq/tribes/pkg/custom_type"
 )
 
 type FindCampaignOutputDTO struct {

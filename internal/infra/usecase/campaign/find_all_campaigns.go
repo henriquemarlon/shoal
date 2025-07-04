@@ -3,8 +3,8 @@ package campaign
 import (
 	"context"
 
-	"github.com/tribeshq/tribes/internal/domain/entity"
-	"github.com/tribeshq/tribes/internal/infra/repository"
+	"github.com/henriquemarlon/shoal/internal/domain/entity"
+	"github.com/henriquemarlon/shoal/internal/infra/repository"
 )
 
 type FindAllCampaignsOutputDTO []*FindCampaignOutputDTO

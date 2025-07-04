@@ -5,11 +5,11 @@ import (
 	"fmt"
 	"sort"
 
+	"github.com/henriquemarlon/shoal/internal/domain/entity"
+	"github.com/henriquemarlon/shoal/internal/infra/repository"
+	"github.com/henriquemarlon/shoal/pkg/custom_type"
 	"github.com/holiman/uint256"
 	"github.com/rollmelette/rollmelette"
-	"github.com/tribeshq/tribes/internal/domain/entity"
-	"github.com/tribeshq/tribes/internal/infra/repository"
-	"github.com/tribeshq/tribes/pkg/custom_type"
 )
 
 type CloseCampaignInputDTO struct {
