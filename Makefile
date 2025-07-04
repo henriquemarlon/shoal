@@ -1,0 +1,36 @@
+include .env.tmpl
+
+START_LOG = @echo "======================= START OF LOG ======================="
+END_LOG = @echo "======================== END OF LOG ======================="
+
+.PHONY: env
+env: ## Create the environment variables file
+	@cp .env.tmpl .env
+
+.PHONY: build
+build: ## Build the application RISC-V image with cartesi cli
+	$(START_LOG)
+	@cartesi build
+	$(END_LOG)
+	
+.PHONY: generate
+generate: ## Generate the application code
+	$(START_LOG)
+	@go generate ./...
+	$(END_LOG)
+
+.PHONY: test
+test: ## Run the application tests
+	$(START_LOG)
+	@go test -p=1 ./... -coverprofile=./coverage.md -v
+	$(END_LOG)
+
+.PHONY: coverage
+coverage: test ## Generate the application code coverage report
+	$(START_LOG)
+	@go tool cover -html=./coverage.md
+	$(END_LOG)
+
+.PHONY: help
+help: ## Show help for each of the Makefile recipes
+	@grep "##" $(MAKEFILE_LIST) | grep -v grep | sed -e 's/:.*##/:\t/'
