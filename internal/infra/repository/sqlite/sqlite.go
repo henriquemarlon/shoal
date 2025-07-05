@@ -64,25 +64,32 @@ func NewSQLiteRepository(conn string) (*SQLiteRepository, error) {
 	var adminAddress string
 	var verifierAddress string
 
+	// Use test addresses for in-memory database (test only)
 	if dbPath == ":memory:" {
 		adminAddr, err := configs.GetShoalAdminAddressTest()
 		if err != nil {
 			return nil, fmt.Errorf("failed to get SHOAL_ADMIN_ADDRESS_TEST: %w", err)
 		}
 		adminAddress = adminAddr.Hex()
+
+		verifierAddr, err := configs.GetShoalVerifierAddressTest()
+		if err != nil {
+			return nil, fmt.Errorf("failed to get SHOAL_VERIFIER_ADDRESS_TEST: %w", err)
+		}
+		verifierAddress = verifierAddr.Hex()
 	} else {
 		adminAddr, err := configs.GetShoalAdminAddress()
 		if err != nil {
 			return nil, fmt.Errorf("failed to get SHOAL_ADMIN_ADDRESS: %w", err)
 		}
 		adminAddress = adminAddr.Hex()
-	}
 
-	verifierAddr, err := configs.GetShoalVerifierAddress()
-	if err != nil {
-		return nil, fmt.Errorf("failed to get SHOAL_VERIFIER_ADDRESS: %w", err)
+		verifierAddr, err := configs.GetShoalVerifierAddress()
+		if err != nil {
+			return nil, fmt.Errorf("failed to get SHOAL_VERIFIER_ADDRESS: %w", err)
+		}
+		verifierAddress = verifierAddr.Hex()
 	}
-	verifierAddress = verifierAddr.Hex()
 
 	adminUser := entity.User{
 		Role:      entity.UserRoleAdmin,

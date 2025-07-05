@@ -34,5 +34,13 @@ Address of the admin user
 Address of the verifier user, who can verify the social accounts
 
 * **Type:** `Address`
+* **Default:** `"0x0000000000000000000000000000000000000026"`
+* **Used by:** rollup
+
+## `SHOAL_VERIFIER_ADDRESS_TEST`
+
+Address of the verifier user, who can verify the social accounts
+
+* **Type:** `Address`
 * **Default:** `"0x0000000000000000000000000000000000000025"`
 * **Used by:** rollup

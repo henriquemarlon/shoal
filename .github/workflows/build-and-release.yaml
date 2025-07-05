@@ -40,6 +40,9 @@ jobs:
         with:
           node-version: current
 
+      - name: Install Foundry
+        uses: foundry-rs/foundry-toolchain@v1
+
       - name: Setup pnpm
         uses: pnpm/action-setup@v4
         with:
@@ -58,8 +61,24 @@ jobs:
           restore-keys: |
             ${{ runner.os }}-go-
 
-      - name: Run Go tests
-        run: go test -p=1 ./...
+      - name: Cache pnpm dependencies
+        uses: actions/cache@v4
+        with:
+          path: |
+            contracts/node_modules
+            ~/.pnpm-store
+          key: ${{ runner.os }}-pnpm-${{ hashFiles('contracts/pnpm-lock.yaml') }}
+          restore-keys: |
+            ${{ runner.os }}-pnpm-
+
+      - name: Install contracts dependencies
+        run: |
+          forge soldeer install
+          pnpm install --frozen-lockfile
+        working-directory: ./contracts
+
+      - name: Run application tests
+        run: make test
 
       - name: Log in to Container registry
         if: startsWith(github.ref, 'refs/tags/')
@@ -69,30 +88,29 @@ jobs:
           username: ${{ github.actor }}
           password: ${{ secrets.GITHUB_TOKEN }}
 
-      - name: Build Tribes Rollup initial snapshot
+      - name: Build Shoal Rollup initial snapshot
         run: |
           # Enable Docker BuildKit for better performance
           export DOCKER_BUILDKIT=1
           make build
         env:
           DOCKER_BUILDKIT: 1
-          # Cache Docker layers
           BUILDKIT_INLINE_CACHE: 1
 
       - name: Create artifact archive for initial snapshot
         if: startsWith(github.ref, 'refs/tags/')
         run: |
-          tar -czf tribes-snapshot.tar.gz -C .cartesi/image .
-          sha256sum tribes-snapshot.tar.gz > tribes-snapshot.tar.gz.sha256
+          tar -czf shoal-snapshot.tar.gz -C .cartesi/image .
+          sha256sum shoal-snapshot.tar.gz > shoal-snapshot.tar.gz.sha256
 
       - name: Upload build artifacts
         if: startsWith(github.ref, 'refs/tags/')
         uses: actions/upload-artifact@v4
         with:
-          name: tribes-snapshot
+          name: shoal-snapshot
           path: |
-            tribes-snapshot.tar.gz
-            tribes-snapshot.tar.gz.sha256
+            shoal-snapshot.tar.gz
+            shoal-snapshot.tar.gz.sha256
           retention-days: 30
 
   release:

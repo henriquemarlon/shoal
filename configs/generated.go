@@ -20,9 +20,10 @@ func init() {
 }
 
 const (
-	SHOAL_ADMIN_ADDRESS      = "SHOAL_ADMIN_ADDRESS"
-	SHOAL_ADMIN_ADDRESS_TEST = "SHOAL_ADMIN_ADDRESS_TEST"
-	SHOAL_VERIFIER_ADDRESS   = "SHOAL_VERIFIER_ADDRESS"
+	SHOAL_ADMIN_ADDRESS         = "SHOAL_ADMIN_ADDRESS"
+	SHOAL_ADMIN_ADDRESS_TEST    = "SHOAL_ADMIN_ADDRESS_TEST"
+	SHOAL_VERIFIER_ADDRESS      = "SHOAL_VERIFIER_ADDRESS"
+	SHOAL_VERIFIER_ADDRESS_TEST = "SHOAL_VERIFIER_ADDRESS_TEST"
 )
 
 func SetDefaults() {
@@ -32,7 +33,9 @@ func SetDefaults() {
 
 	viper.SetDefault(SHOAL_ADMIN_ADDRESS_TEST, "0x976EA74026E726554dB657fA54763abd0C3a0aa9")
 
-	viper.SetDefault(SHOAL_VERIFIER_ADDRESS, "0x0000000000000000000000000000000000000025")
+	viper.SetDefault(SHOAL_VERIFIER_ADDRESS, "0x0000000000000000000000000000000000000026")
+
+	viper.SetDefault(SHOAL_VERIFIER_ADDRESS_TEST, "0x0000000000000000000000000000000000000025")
 
 }
 
@@ -47,6 +50,9 @@ type RollupConfig struct {
 
 	// Address of the verifier user, who can verify the social accounts
 	ShoalVerifierAddress Address `mapstructure:"SHOAL_VERIFIER_ADDRESS"`
+
+	// Address of the verifier user, who can verify the social accounts
+	ShoalVerifierAddressTest Address `mapstructure:"SHOAL_VERIFIER_ADDRESS_TEST"`
 }
 
 // LoadRollupConfig reads configuration from environment variables, a config file, and defaults.
@@ -84,6 +90,13 @@ func LoadRollupConfig() (*RollupConfig, error) {
 		return nil, fmt.Errorf("failed to get SHOAL_VERIFIER_ADDRESS: %w", err)
 	} else if err == ErrNotDefined {
 		return nil, fmt.Errorf("SHOAL_VERIFIER_ADDRESS is required for the rollup service: %w", err)
+	}
+
+	cfg.ShoalVerifierAddressTest, err = GetShoalVerifierAddressTest()
+	if err != nil && err != ErrNotDefined {
+		return nil, fmt.Errorf("failed to get SHOAL_VERIFIER_ADDRESS_TEST: %w", err)
+	} else if err == ErrNotDefined {
+		return nil, fmt.Errorf("SHOAL_VERIFIER_ADDRESS_TEST is required for the rollup service: %w", err)
 	}
 
 	return &cfg, nil
@@ -126,4 +139,17 @@ func GetShoalVerifierAddress() (Address, error) {
 		return v, nil
 	}
 	return notDefinedAddress(), fmt.Errorf("%s: %w", SHOAL_VERIFIER_ADDRESS, ErrNotDefined)
+}
+
+// GetShoalVerifierAddressTest returns the value for the environment variable SHOAL_VERIFIER_ADDRESS_TEST.
+func GetShoalVerifierAddressTest() (Address, error) {
+	s := viper.GetString(SHOAL_VERIFIER_ADDRESS_TEST)
+	if s != "" {
+		v, err := toAddress(s)
+		if err != nil {
+			return v, fmt.Errorf("failed to parse %s: %w", SHOAL_VERIFIER_ADDRESS_TEST, err)
+		}
+		return v, nil
+	}
+	return notDefinedAddress(), fmt.Errorf("%s: %w", SHOAL_VERIFIER_ADDRESS_TEST, ErrNotDefined)
 }

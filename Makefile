@@ -22,7 +22,24 @@ generate: ## Generate the application code
 .PHONY: test
 test: ## Run the application tests
 	$(START_LOG)
+	@forge test -vvv --root ./contracts
+	@go generate ./...
 	@go test -p=1 ./... -coverprofile=./coverage.md -v
+	$(END_LOG)
+
+.PHONY: lint
+lint: ## Run linting and formatting checks
+	$(START_LOG)
+	@test -z "$(gofmt -l .)" || (echo "Go code is not formatted. Run 'gofmt -w .'" && exit 1)
+	@go vet ./...
+	@forge fmt --check --root ./contracts
+	$(END_LOG)
+
+.PHONY: fmt
+fmt: ## Format code
+	$(START_LOG)
+	@gofmt -w .
+	@forge fmt --root ./contracts
 	$(END_LOG)
 
 .PHONY: coverage

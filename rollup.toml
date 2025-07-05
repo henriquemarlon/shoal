@@ -16,6 +16,12 @@ used-by = ["rollup"]
 
 [contracts.SHOAL_VERIFIER_ADDRESS]
 go-type = "Address"
+default = "0x0000000000000000000000000000000000000026"
+description = """Address of the verifier user, who can verify the social accounts"""
+used-by = ["rollup"]
+
+[contracts.SHOAL_VERIFIER_ADDRESS_TEST]
+go-type = "Address"
 default = "0x0000000000000000000000000000000000000025"
 description = """Address of the verifier user, who can verify the social accounts"""
 used-by = ["rollup"]
