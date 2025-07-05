@@ -4,7 +4,7 @@
 
 [contracts.SHOAL_ADMIN_ADDRESS]
 go-type = "Address"
-default = "0x976EA74026E726554dB657fA54763abd0C3a0aa9"
+default = "0xd554153658e8d466428fa48487f5aba18df5e628"
 description = """Address of the admin user"""
 used-by = ["rollup"]
 
@@ -16,7 +16,7 @@ used-by = ["rollup"]
 
 [contracts.SHOAL_VERIFIER_ADDRESS]
 go-type = "Address"
-default = "0x0000000000000000000000000000000000000026"
+default = "0x66890C637A441b3A66E4F9377eE705bD4Ced506c"
 description = """Address of the verifier user, who can verify the social accounts"""
 used-by = ["rollup"]
 

@@ -18,7 +18,7 @@ This file documents the configuration options.
 Address of the admin user
 
 * **Type:** `Address`
-* **Default:** `"0x976EA74026E726554dB657fA54763abd0C3a0aa9"`
+* **Default:** `"0xd554153658e8d466428fa48487f5aba18df5e628"`
 * **Used by:** rollup
 
 ## `SHOAL_ADMIN_ADDRESS_TEST`
@@ -34,7 +34,7 @@ Address of the admin user
 Address of the verifier user, who can verify the social accounts
 
 * **Type:** `Address`
-* **Default:** `"0x0000000000000000000000000000000000000026"`
+* **Default:** `"0x66890C637A441b3A66E4F9377eE705bD4Ced506c"`
 * **Used by:** rollup
 
 ## `SHOAL_VERIFIER_ADDRESS_TEST`
