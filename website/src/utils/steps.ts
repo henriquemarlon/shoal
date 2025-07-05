@@ -30,9 +30,9 @@ import {
       path: "",
       kind: STEP_KIND.WELCOME,
       component: WelcomeScreen,
-      title: "X NFT",
+      title: "Start verification on the system",
       description:
-        "Mint an NFT with your X account. Only owner of account can mint NFT for specific handle. This example demonstrates use of Web Proofs.",
+        "Start verification on the system",
       headerIcon: "/nft-illustration.svg",
       index: 0,
     },
@@ -41,9 +41,9 @@ import {
       kind: STEP_KIND.START_PROVING,
       backUrl: "/",
       component: ProveStep,
-      title: "X NFT",
+      title: "Start verification on the system",
       description:
-        "Open vlayer browser extension and follow instructions in order to produce the Proof of X account ownership. \n",
+        "Start verification on the system",
       index: 1,
     },
     {
@@ -51,8 +51,8 @@ import {
       kind: STEP_KIND.INSTALL_EXTENSION,
       component: InstallExtension,
       backUrl: "/",
-      title: "X NFT",
-      description: `Install vlayer browser extension to proceed to the next step. \n`,
+      title: "Start verification on the system",
+      description: `Start verification on the system`,
       index: 2,
     },
     {
