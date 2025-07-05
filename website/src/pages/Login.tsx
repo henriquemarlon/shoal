@@ -4,7 +4,7 @@ import { usePrivy, useLogin, useWallets } from '@privy-io/react-auth';
 import { useNavigate } from "react-router-dom";
 
 const userRoles: Record<string, "admin" | "investidor" | "creator"> = {
-  "0x4c3529aacE68b6F1cB514145a5058E5Dace69C75": "admin",
+  "0x4c3529aacE68b6F1cB514145a5058E5Dace69C75": "creator",
 };
 
 const Login: FC = () => {
@@ -19,6 +19,7 @@ const Login: FC = () => {
     if (ready && authenticated && userAddress) {
       const role = userRoles[userAddress]; 
       if (role === "admin") navigate("/admin");
+      else if (role === "creator") navigate("/panel");
       
       else navigate("/login");
     }
