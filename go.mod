@@ -6,8 +6,10 @@ require (
 	github.com/BurntSushi/toml v1.5.0
 	github.com/ethereum/go-ethereum v1.16.1
 	github.com/go-playground/validator/v10 v10.27.0
+	github.com/google/wire v0.6.0
 	github.com/holiman/uint256 v1.3.2
 	github.com/rollmelette/rollmelette v0.0.0-20250617235715-ae3ab2e9957f
+	github.com/spf13/cobra v1.9.1
 	github.com/spf13/viper v1.20.1
 	golang.org/x/text v0.23.0
 	gorm.io/driver/sqlite v1.6.0
@@ -21,6 +23,7 @@ require (
 	github.com/go-playground/locales v0.14.1 // indirect
 	github.com/go-playground/universal-translator v0.18.1 // indirect
 	github.com/go-viper/mapstructure/v2 v2.2.1 // indirect
+	github.com/inconshreveable/mousetrap v1.1.0 // indirect
 	github.com/jinzhu/inflection v1.0.0 // indirect
 	github.com/jinzhu/now v1.1.5 // indirect
 	github.com/leodido/go-urn v1.4.0 // indirect
