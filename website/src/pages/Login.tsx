@@ -4,9 +4,7 @@ import { usePrivy, useLogin, useWallets } from '@privy-io/react-auth';
 import { useNavigate } from "react-router-dom";
 
 const userRoles: Record<string, "admin" | "investidor" | "creator"> = {
-  // "0x4c3529aacE68b6F1cB514145a5058E5Dace69C75": "admin",
-  "0xinvestorwallet": "investidor",
-  "0x4c3529aacE68b6F1cB514145a5058E5Dace69C75": "creator",
+  "0x4c3529aacE68b6F1cB514145a5058E5Dace69C75": "admin",
 };
 
 const Login: FC = () => {
@@ -20,7 +18,9 @@ const Login: FC = () => {
   useEffect(() => {
     if (ready && authenticated && userAddress) {
       const role = userRoles[userAddress]; 
+      if (role === "admin") navigate("/admin");
       
+      else navigate("/login");
     }
 
   }, [ready, authenticated, userAddress, navigate]);
