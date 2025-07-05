@@ -5,6 +5,7 @@ export const InstallExtensionPresentational = () => {
     <>
       <div className="mt-7 flex justify-center">
         <button
+          className="bg-[#FF533F] text-white px-4 py-2 rounded-lg cursor-pointer"
           id="nextButton"
           onClick={() => {
             window.open(

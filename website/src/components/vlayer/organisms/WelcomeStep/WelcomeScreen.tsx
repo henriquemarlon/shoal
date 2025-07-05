@@ -12,9 +12,10 @@ export const WelcomeScreen = () => {
       {!isMobile && (
         <div className="mt-5 flex justify-center">
           <Link
-            to="/panel/verify/start-proving"
+            to="/panel/profile/start-proving"
             id="nextButton"
             data-testid="start-page-button"
+            className="bg-[#FF533F] text-white px-4 py-2 rounded-lg cursor-pointer"
           >
             Start
           </Link>

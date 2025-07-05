@@ -19,6 +19,7 @@ export const ProveStepPresentational = ({
             requestWebProof();
             setDisabled(true);
           }}
+          className="bg-[#FF533F] text-white px-4 py-2 rounded-lg cursor-pointer"
         >
           {isPending ? "Proving in progress..." : "Open Extension"}
         </button>
