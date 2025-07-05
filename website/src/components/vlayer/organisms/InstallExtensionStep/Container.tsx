@@ -10,7 +10,7 @@ export const InstallExtension = () => {
 
   useEffect(() => {
     if (hasExtensionInstalled) {
-      void navigate("/panel/profile/start-proving");
+      void navigate("/panel/start-proving");
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [hasExtensionInstalled]);

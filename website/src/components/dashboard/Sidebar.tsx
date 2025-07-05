@@ -5,7 +5,7 @@ import { useLogout } from '@privy-io/react-auth';
 import LogoShoal from "@/images/LogoShoal";
 import { LogOut } from 'lucide-react';
 
-type Role = "admin" | "investidor" | "creator";
+type Role = "admin" | "investor" | "creator";
 
 interface SidebarProps {
   role: Role;
@@ -14,9 +14,8 @@ interface SidebarProps {
 const sidebarOptions: Record<Role, { label: string; path: string }[]> = {
   admin: [
     { label: "Dashboard", path: "/admin" },
-    { label: "Users", path: "/admin/users" }
   ],
-  investidor: [
+  investor: [
     { label: "Investimentos", path: "/investidor" },
     { label: "Carteira", path: "/investidor/carteira" },
   ],
@@ -46,10 +45,26 @@ const Sidebar: FC<SidebarProps> = ({ role }) => {
   };
 
   return (
-      <aside className="w-56 bg-white shadow-md h-screen flex flex-col py-4 px-4 fixed left-0 top-0 z-20">
-      <div className="flex justify-center items-center">
+      <aside className="w-56 bg-white shadow-md h-screen flex flex-col py-8 px-4 fixed left-0 top-0 z-20">
+      
+      <div className="flex flex-col justify-center items-center mb-8">
         <LogoShoal width={90} height={50} />
+        <div
+            className={
+              "inline-block px-3 py-1 rounded-md border font-semibold text-xs text-center " +
+              (role === "admin"
+                ? "bg-red-100 border-red-400 text-red-700"
+                : role === "creator"
+                ? "bg-blue-100 border-blue-400 text-blue-700"
+                : role === "investor"
+                ? "bg-green-100 border-green-400 text-green-700"
+                : "bg-gray-100 border-gray-300 text-gray-500")
+            }
+          >
+            {role}
+          </div>
       </div>
+
 
       <nav className="flex flex-col justify-between gap-4 h-full">
         <div className="flex flex-col gap-4 mt-4">
@@ -68,16 +83,18 @@ const Sidebar: FC<SidebarProps> = ({ role }) => {
           ))}
         </div>
         
-        <button
-          className="bg-red-100 cursor-pointer w-full gap-2 flex justify-center items-center px-4 py-2 rounded-lg transition text-red-500 mt-8 "
-          onClick={async () => {
-            await logout();
-            navigate('/login', { replace: true });
-          }}
-        >
-          Logout
-          <LogOut className="w-4" />
-        </button>
+        <div className="mt-8 gap-2 flex flex-col">
+          <button
+            className="bg-red-100 cursor-pointer w-full gap-2 flex justify-center items-center px-4 py-2 rounded-lg transition text-red-500 "
+            onClick={async () => {
+              await logout();
+              navigate('/login', { replace: true });
+            }}
+          >
+            Logout
+            <LogOut className="w-4" />
+          </button>
+        </div>
 
       </nav>
     </aside>

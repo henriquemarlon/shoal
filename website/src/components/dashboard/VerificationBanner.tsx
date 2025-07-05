@@ -21,14 +21,7 @@ export function VerificationBanner({ verified }: { verified: boolean }) {
           ? "✅ Você já está verificado no sistema!"
           : "⚠️ É necessário se verificar no sistema."}
       </span>
-      {!verified && notOnProfile && (
-        <button
-          onClick={() => navigate("/panel/profile")}
-          className="ml-4 px-4 py-1 cursor-pointer rounded-lg bg-[#ff533f] text-white shadow hover:bg-[#ff533f]/80 transition"
-        >
-          Ir para verificação
-        </button>
-      )}
+      
     </div>
   );
 }

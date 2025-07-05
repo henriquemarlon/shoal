@@ -1,10 +1,6 @@
-import { Outlet, useLocation, useNavigate } from "react-router-dom";
-import { steps } from "@/utils/steps";
-import { Modal } from "@/components/dashboard/Modal";
 import { useEffect, useState } from "react";
 import { usePrivy } from "@privy-io/react-auth";
 import { Button } from "@/components/ui/button";
-import { VerificationBanner } from "@/components/dashboard/VerificationBanner";
 
 function ProfileCard() {
   const { user, linkEmail, linkWallet } = usePrivy();
@@ -37,22 +33,12 @@ function ProfileCard() {
 }
 
 const ProfilePage = () => {
-  const [isVerified, setIsVerified] = useState(false);
-  // useEffect(() => {
-  //   setIsVerified(true);
-  // }, []);
 
   return (
     <div className="flex bg-gray-100">
       <main className="flex-1">
-        <VerificationBanner verified={isVerified} />
         <div className="flex w-full gap-8 items-start"> 
-        <ProfileCard />
-          {!isVerified && (
-            <Modal>
-              <Outlet />
-            </Modal>
-          )}
+        <ProfileCard />  
         </div>
       </main>
     </div>

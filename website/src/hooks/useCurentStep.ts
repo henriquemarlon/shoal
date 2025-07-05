@@ -15,7 +15,7 @@ export const useCurrentStep = () => {
 const byPath = (location: Location<unknown>) => (step: Step) => {
   const segments = location.pathname.split("/").filter(Boolean);
   const last = segments[segments.length - 1];
-  if (last === "profile") {
+  if (last === "panel") {
     return step.path === "";
   }
   return step.path === last;

@@ -73,7 +73,7 @@ export const MintStep = () => {
   useEffect(() => {
     if (status === "success") {
       setIsMinting(false);
-      void navigate(`/panel/profile/success?tx=${txHash}&handle=${mintedHandle}`);
+      void navigate(`/panel/success?tx=${txHash}&handle=${mintedHandle}`);
     }
   }, [status, txHash, mintedHandle, navigate]);
 

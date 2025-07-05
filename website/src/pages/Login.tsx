@@ -4,10 +4,13 @@ import { usePrivy, useLogin, useWallets } from '@privy-io/react-auth';
 import { useNavigate } from "react-router-dom";
 import { ArrowRight } from 'lucide-react';
 import ShoalLogo from "@/images/LogoShoal";
+import { toast } from "sonner"
 
-const userRoles: Record<string, "admin" | "investidor" | "creator"> = {
+
+const userRoles: Record<string, "admin" | "investor" | "creator"> = {
   "0x4c3529aacE68b6F1cB514145a5058E5Dace69C75": "admin",
   "0xaCAB2057C130B3Ac2C028d8823f21859f8Afdf3C": "creator",
+  "0xf39Fd6e51aad88F6F4ce6aB8827279cffFb92266": "investor"
 };
 
 const Login: FC = () => {
@@ -23,8 +26,10 @@ const Login: FC = () => {
       const role = userRoles[userAddress]; 
       if (role === "admin") navigate("/admin");
       else if (role === "creator") navigate("/panel");
-      
-      else navigate("/login");
+      else {
+        toast.error("It looks like you are not registered in the system. Please contact the administrator.");
+        navigate("/login");
+      }
     }
 
   }, [ready, authenticated, userAddress, navigate]);
