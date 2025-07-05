@@ -7,8 +7,8 @@ const ProfilePage = () => {
     <div className="flex bg-gray-100">
       <main className="flex-1">
         <div className="flex w-full gap-8 items-start">
-          <ProfileCard />
-          <WithdrawTable />
+        <ProfileCard />
+        <WithdrawTable />
         </div>
       </main>
     </div>

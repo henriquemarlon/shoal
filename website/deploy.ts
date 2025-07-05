@@ -1,6 +1,6 @@
 import fs from "fs";
-import proverSpec from "./out/WebProofProver.sol/WebProofProver";
-import verifierSpec from "./out/WebProofVerifier.sol/WebProofVerifier";
+import proverSpec from "./abi/WebProofProver.sol/WebProofProver";
+import verifierSpec from "./abi/WebProofVerifier.sol/WebProofVerifier";
 import {
   deployVlayerContracts,
   writeEnvVariables,

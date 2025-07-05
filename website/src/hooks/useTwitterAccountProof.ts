@@ -10,7 +10,7 @@ import type { WebProofConfig, ProveArgs } from "@vlayer/sdk";
 import type { Abi, ContractFunctionName } from "viem";
 import { startPage, expectUrl, notarize } from "@vlayer/sdk/web_proof";
 import { UseChainError, WebProofError } from "@/errors";
-import webProofProver from "../../out/WebProofProver.sol/WebProofProver";
+import webProofProver from "../../abi/WebProofProver.sol/WebProofProver";
 
 const webProofConfig: WebProofConfig<Abi, string> = {
   proverCallCommitment: {

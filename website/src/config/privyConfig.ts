@@ -3,7 +3,7 @@ import type {PrivyClientConfig} from '@privy-io/react-auth';
 export const privyConfig: PrivyClientConfig = {
     appearance: {
         walletChainType: 'ethereum-only',
-        walletList: ['metamask', 'rainbow', 'wallet_connect'],
+        walletList: ['metamask', 'phantom'],
     },
     embeddedWallets: {
       ethereum: {

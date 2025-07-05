@@ -24,6 +24,7 @@
     "@tanstack/react-query": "^5.81.5",
     "@vlayer/react": "1.2.3-nightly-20250704-56f977a6c53aa81e33dbb93b8300393de259f7d9",
     "@vlayer/sdk": "1.2.3-nightly-20250704-56f977a6c53aa81e33dbb93b8300393de259f7d9",
+    "axios": "^1.10.0",
     "class-variance-authority": "^0.7.1",
     "clsx": "^2.1.1",
     "date-fns": "^4.1.0",

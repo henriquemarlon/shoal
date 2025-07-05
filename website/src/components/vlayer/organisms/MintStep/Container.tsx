@@ -9,7 +9,7 @@ import {
 
 import { useLocalStorage } from "usehooks-ts";
 
-import webProofProofVerifier from "../../../../../out/WebProofVerifier.sol/WebProofVerifier";
+import webProofProofVerifier from "../../../../../abi/WebProofVerifier.sol/WebProofVerifier";
 import { MintStepPresentational } from "./Presentational";
 import { ensureBalance } from "../../../../utils/ethFaucet";
 import { AlreadyMintedError } from "@/errors";
