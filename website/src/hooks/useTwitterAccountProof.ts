@@ -6,10 +6,10 @@ import {
   useChain,
 } from "@vlayer/react";
 import { useLocalStorage } from "usehooks-ts";
-import { WebProofConfig, ProveArgs } from "@vlayer/sdk";
-import { Abi, ContractFunctionName } from "viem";
+import type { WebProofConfig, ProveArgs } from "@vlayer/sdk";
+import type { Abi, ContractFunctionName } from "viem";
 import { startPage, expectUrl, notarize } from "@vlayer/sdk/web_proof";
-import { UseChainError, WebProofError } from "../errors";
+import { UseChainError, WebProofError } from "@/errors";
 import webProofProver from "../../out/WebProofProver.sol/WebProofProver";
 
 const webProofConfig: WebProofConfig<Abi, string> = {

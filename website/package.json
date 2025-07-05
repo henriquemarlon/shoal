@@ -4,7 +4,8 @@
   "version": "0.0.0",
   "type": "module",
   "scripts": {
-    "dev": "vite",
+    "dev": "VLAYER_ENV=dev bun run deploy.ts && vite",
+    "test": "VLAYER_ENV=testnet bun run deploy.ts && vite",
     "build": "tsc -b && vite build",
     "lint": "eslint .",
     "preview": "vite preview"
