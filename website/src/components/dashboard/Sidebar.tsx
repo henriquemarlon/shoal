@@ -37,13 +37,16 @@ const Sidebar: FC<SidebarProps> = ({ role }) => {
       return location.pathname === "/admin";
     }
     if (path === "/panel") {
-      return location.pathname.startsWith("/panel");
+      return location.pathname.startsWith("/panel") && !location.pathname.startsWith("/panel/profile");
+    }
+    if (path === "/panel/profile") {
+      return location.pathname.startsWith("/panel/profile");
     }
     return location.pathname === path;
   };
 
   return (
-    <aside className="w-56 bg-white shadow-md h-screen flex flex-col py-4 px-4">
+      <aside className="w-56 bg-white shadow-md h-screen flex flex-col py-4 px-4 fixed left-0 top-0 z-20">
       <div className="flex justify-center items-center">
         <LogoShoal width={90} height={50} />
       </div>
@@ -54,7 +57,7 @@ const Sidebar: FC<SidebarProps> = ({ role }) => {
             <button
               key={opt.path}
               className={`flex text-sm justify-center items-center px-4 py-2 rounded-xl transition w-full cursor-pointer
- ${isActive(opt.path)
+          ${isActive(opt.path)
                   ? "bg-gray-200"
                   : ""
                 }`}
