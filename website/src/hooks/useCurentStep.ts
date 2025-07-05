@@ -13,5 +13,10 @@ export const useCurrentStep = () => {
 };
 
 const byPath = (location: Location<unknown>) => (step: Step) => {
-  return step.path === location.pathname.split("/")[1];
+  const segments = location.pathname.split("/").filter(Boolean);
+  const last = segments[segments.length - 1];
+  if (last === "profile") {
+    return step.path === "";
+  }
+  return step.path === last;
 };

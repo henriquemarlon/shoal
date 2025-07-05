@@ -8,7 +8,9 @@ import AdminPage from "./pages/AdminPage";
 import AdminUsers from "./components/dashboard/AdminUsers";
 import { steps } from "./utils/steps";
 import CreatorPanel from "./pages/CreatorPanel";
-
+import Campaigns from "./components/dashboard/Campaigns";
+import ProfilePage from "./pages/ProfilePage";
+import { WelcomeScreen } from "./components/vlayer";
 
 const App: FC = () => {
   return (
@@ -16,7 +18,7 @@ const App: FC = () => {
       <BrowserRouter>
           <Routes>
             <Route path="/" element={<LandingPage />} />
-             <Route path="/login" element={<Login />} />
+            <Route path="/login" element={<Login />} />
 
              {/* Admin */}
             <Route path="/admin" element={<AdminPage />}>
@@ -26,8 +28,10 @@ const App: FC = () => {
 
             {/* Creator Panel */}
             <Route path="/panel" element={<CreatorPanel />}>
-              <Route path="verify" element={<Outlet />}>
-                {steps.map((step) => (
+              <Route index element={<Campaigns />} />
+              <Route path="profile" element={<ProfilePage />}>
+                <Route index element={<WelcomeScreen />} />
+                {steps.filter(s => s.path).map((step) => (
                   <Route
                     key={step.path}
                     path={step.path}

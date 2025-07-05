@@ -2,9 +2,12 @@ import React, { useEffect } from "react";
 import type { FC } from "react";
 import { usePrivy, useLogin, useWallets } from '@privy-io/react-auth';
 import { useNavigate } from "react-router-dom";
+import { ArrowRight } from 'lucide-react';
+import ShoalLogo from "@/images/LogoShoal";
 
 const userRoles: Record<string, "admin" | "investidor" | "creator"> = {
-  "0x4c3529aacE68b6F1cB514145a5058E5Dace69C75": "creator",
+  "0x4c3529aacE68b6F1cB514145a5058E5Dace69C75": "admin",
+  "0xaCAB2057C130B3Ac2C028d8823f21859f8Afdf3C": "creator",
 };
 
 const Login: FC = () => {
@@ -34,10 +37,11 @@ const Login: FC = () => {
 
   return (
     <div className="flex flex-col items-center justify-center min-h-screen bg-gray-100">
-        <div className="bg-white p-8 rounded-lg shadow-md">
-          <h1 className="text-2xl font-bold text-gray-800 mb-6 text-center">Login</h1>
+        <div className="bg-white p-8 rounded-xl shadow-md flex flex-col items-center w-[20%]">
+          <ShoalLogo />
+          <p className="text-gray-600 mb-6 text-center">Please log in to continue</p>
           <button
-            className="bg-blue-500 hover:bg-blue-600 text-white px-6 py-3 rounded-md font-medium transition-colors"
+            className="flex items-center justify-center bg-[#FF533F] cursor-pointer text-white px-6 py-2 rounded-lg font-medium transition-colors"
             disabled={disableLogin}
             onClick={() => login({
               loginMethods: ['wallet', 'email'],
@@ -45,6 +49,7 @@ const Login: FC = () => {
             })}
           >
             Log in
+            <ArrowRight className="w-4 h-4 ml-2" />
           </button>
         </div>
       </div>
