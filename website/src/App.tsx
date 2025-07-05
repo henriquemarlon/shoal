@@ -10,6 +10,9 @@ import CreatorPanel from "./pages/CreatorPanel";
 import Campaigns from "./components/dashboard/Campaigns";
 import ProfilePage from "./pages/ProfilePage";
 import { WelcomeScreen } from "./components/vlayer";
+import InvestorPage from "./pages/InvestorPage";
+import Investments from "./components/dashboard/Investiments";
+import VideoFeed from "./components/dashboard/VideoFeed";
 
 const App: FC = () => {
   return (
@@ -22,6 +25,13 @@ const App: FC = () => {
              {/* Admin */}
             <Route path="/admin" element={<AdminPage />}>
               <Route index element={<Admin />} />
+            </Route>
+
+            {/* Investor Panel */}
+            <Route path="/investor" element={<InvestorPage />}>
+              <Route index element={<VideoFeed />} />
+              <Route path="investments" element={<Investments />} />
+              <Route path="profile" element={<ProfilePage />} /> 
             </Route>
 
             {/* Creator Panel */}
@@ -37,8 +47,7 @@ const App: FC = () => {
                 ))}
               </Route>
               
-              <Route path="profile" element={<ProfilePage />} />
-              
+              <Route path="profile" element={<ProfilePage />} /> 
             </Route>
             
           </Routes>

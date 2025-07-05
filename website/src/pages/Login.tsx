@@ -26,6 +26,7 @@ const Login: FC = () => {
       const role = userRoles[userAddress]; 
       if (role === "admin") navigate("/admin");
       else if (role === "creator") navigate("/panel");
+      else if (role === "investor") navigate("/investor");
       else {
         toast.error("It looks like you are not registered in the system. Please contact the administrator.");
         navigate("/login");

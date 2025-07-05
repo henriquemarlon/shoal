@@ -105,6 +105,10 @@ export default function CampaignList() {
                 </div>
               ))}
 
+              {campaigns.length === 0 && (
+                <div className="text-center text-gray-500">No campaigns found</div>
+              )}
+
             </div>
 
           </div>

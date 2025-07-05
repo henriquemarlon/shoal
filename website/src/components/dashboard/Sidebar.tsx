@@ -16,8 +16,9 @@ const sidebarOptions: Record<Role, { label: string; path: string }[]> = {
     { label: "Dashboard", path: "/admin" },
   ],
   investor: [
-    { label: "Investimentos", path: "/investidor" },
-    { label: "Carteira", path: "/investidor/carteira" },
+    { label: "Feed", path: "/investor" },
+    { label: "Investments", path: "/investor/investments" },
+    { label: "Profile", path: "/investor/profile" },
   ],
   creator: [
     { label: "Campaigns", path: "/panel" },
@@ -40,6 +41,15 @@ const Sidebar: FC<SidebarProps> = ({ role }) => {
     }
     if (path === "/panel/profile") {
       return location.pathname.startsWith("/panel/profile");
+    }
+    if (path === "/investor") {
+      return location.pathname === "/investor";
+    }
+    if (path === "/investor/investments") {
+      return location.pathname === "/investor/investments";
+    }
+    if (path === "/investor/profile") {
+      return location.pathname.startsWith("/investor/profile");
     }
     return location.pathname === path;
   };
