@@ -1,7 +1,73 @@
-include .env.tmpl
+-include .env
 
 START_LOG = @echo "======================= START OF LOG ======================="
 END_LOG = @echo "======================== END OF LOG ======================="
+
+define deploy_assets
+	$(START_LOG)
+	@forge clean --root ./contracts
+	@forge script ./contracts/script/DeployAssets.s.sol \
+		--root ./contracts \
+		--rpc-url $(SEPOLIA_RPC_URL) \
+		--private-key $(PRIVATE_KEY) \
+		--broadcast \
+		-vvv
+	$(END_LOG)
+endef
+
+define deploy_chainlink
+	$(START_LOG)\
+	@forge clean --root ./contracts
+	@forge script ./contracts/script/CrossChainNFT.s.sol:CrossChainNFTSourceMinter \
+		--root ./contracts \
+		--rpc-url $(SEPOLIA_RPC_URL) \
+		--private-key $(PRIVATE_KEY) \
+		--broadcast \
+		-vvv
+	@forge script ./contracts/script/CrossChainNFT.s.sol:CrossChainNFTDestinationMinter \
+		--root ./contracts \
+		--rpc-url $(ARBITRUM_SEPOLIA_RPC_URL) \
+		--private-key $(PRIVATE_KEY) \
+		--broadcast \
+		-vvv
+	$(END_LOG)
+endef
+
+define deploy_vlayer
+	$(START_LOG)
+	@forge clean --root ./contracts
+	@forge script ./contracts/script/DeployVlayer.s.sol \
+		--root ./contracts \
+		--rpc-url $(SEPOLIA_RPC_URL) \
+		--private-key $(PRIVATE_KEY) \
+		--broadcast \
+		-vvv
+	$(END_LOG)
+endef
+
+define deploy_delegatecall
+	$(START_LOG)
+	@forge clean --root ./contracts
+	@forge script ./contracts/script/DeployDelegatecall.s.sol \
+		--root ./contracts \
+		--rpc-url $(SEPOLIA_RPC_URL) \
+		--private-key $(PRIVATE_KEY) \
+		--broadcast \
+		-vvv
+	$(END_LOG)
+endef
+
+define setup_application
+	$(START_LOG)
+	@forge clean --root ./contracts
+	@forge script ./contracts/script/CrossChainNFT.s.sol:SetupApplication \
+		--root ./contracts \
+		--rpc-url $(SEPOLIA_RPC_URL) \
+		--private-key $(PRIVATE_KEY) \
+		--broadcast \
+		-vvv
+	$(END_LOG)
+endef
 
 .PHONY: env
 env: ## Create the environment variables file
@@ -46,6 +112,37 @@ fmt: ## Format code
 coverage: test ## Generate the application code coverage report
 	$(START_LOG)
 	@go tool cover -html=./coverage.md
+	$(END_LOG)
+
+.PHONY: contracts
+contracts: assets chainlink vlayer delegatecall ## Deploy the contracts
+
+.PHONY: chainlink
+chainlink: ## Deploy the chainlink contracts
+	@$(deploy_chainlink)
+
+.PHONY: vlayer
+vlayer: ## Deploy the vlayer contracts
+	@$(deploy_vlayer)
+
+.PHONY: delegatecall
+delegatecall: ## Deploy the delegatecall contracts
+	@$(deploy_delegatecall)
+
+.PHONY: assets
+assets: ## Deploy the assets contracts
+	@$(deploy_assets)
+
+.PHONY: setup
+setup: ## Transfers ownership of a deployed SourceMinter contract to the shoal application address
+	@$(setup_application)
+
+.PHONY: info
+info: ## Show all deployed contracts addresses
+	$(START_LOG)
+	@forge script ./contracts/script/Helper.s.sol \
+		--root ./contracts \
+		-vvv
 	$(END_LOG)
 
 .PHONY: help

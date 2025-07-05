@@ -20,3 +20,8 @@ fly secrets set -a <app-name> CARTESI_BLOCKCHAIN_WS_ENDPOINT=<web3-provider-ws-e
 fly secrets set -a <app-name> CARTESI_AUTH_MNEMONIC=`<mnemonic>`
 fly secrets set -a <app-name> CARTESI_DATABASE_CONNECTION=<connection_string>
 ```
+
+- [ ] Deployar os contratos;
+- [ ] Proper release;
+- [ ] README.md;
+- [ ] Registar aplicação;
