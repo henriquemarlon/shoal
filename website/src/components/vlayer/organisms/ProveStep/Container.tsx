@@ -28,7 +28,7 @@ export const ProveStep = () => {
 
   useEffect(() => {
     if (result) {
-      void navigate("/panel/profile/mint");
+      void navigate("/panel/mint");
     }
   }, [result, navigate]);
 

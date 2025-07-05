@@ -18,8 +18,8 @@ export function VerificationBanner({ verified }: { verified: boolean }) {
     >
       <span className="font-medium text-md">
         {verified
-          ? "✅ Você já está verificado no sistema!"
-          : "⚠️ É necessário se verificar no sistema."}
+          ? "✅ You are verified in the system!"
+          : "⚠️ It's necessary to verify your account."}
       </span>
       
     </div>

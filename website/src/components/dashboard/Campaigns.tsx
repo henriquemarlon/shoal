@@ -36,9 +36,12 @@ export default function CampaignList() {
       {!verification && (
         <>
           <VerificationBanner verified={verification} />
-          <Modal>
-            <Outlet />
-          </Modal>
+          <div className="flex justify-center items-center w-full mt-48">
+            <Modal>
+              <Outlet />
+            </Modal>
+          </div>
+          
         </>
       )}
 
