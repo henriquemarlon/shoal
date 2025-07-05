@@ -106,13 +106,13 @@ Set up your environment variables:
 
 ```bash
 ## Please set SEPOLIA_RPC_URL on .env
-SEPOLIA_RPC_URL="https://eth-sepolia.g.alchemy.com/v2/gWR5B3tQIAJtNRcPPKT4d"
+SEPOLIA_RPC_URL=""
 
 ## Please set ARBITRUM_SEPOLIA_NETWORK on .env
-ARBITRUM_SEPOLIA_RPC_URL="https://arb-sepolia.g.alchemy.com/v2/gWR5B3tQIAJtNRcPPKT4d"
+ARBITRUM_SEPOLIA_RPC_URL=""
 
 ## Please set PRIVATE_KEY on .env 
-PRIVATE_KEY="0x9eaef87b3875aacb51cd38b67687adce78ffbc60feba2c435ef06cd122c784af"
+PRIVATE_KEY=""
 ```
 
 Deploy all contracts:
