@@ -11,15 +11,7 @@ export const SuccessStepPresentational = ({
   return (
     <>
       <p className="text-gray-500">
-        @{handle} was minted to{" "}
-        <a
-          href={`${blockExplorer}/tx/${tx}`}
-          target="_blank"
-          rel="noopener noreferrer"
-          className="text-violet-500 underline"
-        >
-          {tx.slice(0, 6)}...{tx.slice(-4)}
-        </a>
+        @{handle} was verified!
       </p>
       <p className="text-gray-500">
         <a

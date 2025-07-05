@@ -41,7 +41,7 @@ import React, {
         <div className="w-[25%] h-72 bg-white rounded-2xl shadow flex flex-col gap-4 justify-center items-center p-8">      
           
           {currentStep?.title && (
-            <h3 className="text-2xl font-semibold">{currentStep?.title}</h3>
+            <h3 className="text-2xl font-semibold text-center">{currentStep?.title}</h3>
           )}
           <p className="text-sm text-gray-500 text-center">{description}</p>
 

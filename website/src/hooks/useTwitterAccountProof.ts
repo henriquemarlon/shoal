@@ -10,7 +10,7 @@ import type { WebProofConfig, ProveArgs } from "@vlayer/sdk";
 import type { Abi, ContractFunctionName } from "viem";
 import { startPage, expectUrl, notarize } from "@vlayer/sdk/web_proof";
 import { UseChainError, WebProofError } from "@/errors";
-import webProofProver from "../../abi/WebProofProver.sol/WebProofProver";
+import WebProofXProver from "../../abi/WebProofXProver.sol/WebProofXProver";
 
 const webProofConfig: WebProofConfig<Abi, string> = {
   proverCallCommitment: {
@@ -74,7 +74,7 @@ export const useTwitterAccountProof = () => {
     "args"
   > = {
     address: import.meta.env.VITE_PROVER_ADDRESS as `0x${string}`,
-    proverAbi: webProofProver.abi,
+    proverAbi: WebProofXProver.abi,
     chainId: chain?.id,
     functionName: "main",
     gasLimit: Number(import.meta.env.VITE_GAS_LIMIT),
