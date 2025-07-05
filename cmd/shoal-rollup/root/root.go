@@ -87,7 +87,7 @@ func NewShoalRollup(repo repository.Repository) *router.Router {
 		orderGroup.HandleInspect("", handlers.OrderInspectHandlers.FindAllOrders)
 		orderGroup.HandleInspect("id", handlers.OrderInspectHandlers.FindOrderById)
 		orderGroup.HandleInspect("campaign", handlers.OrderInspectHandlers.FindBidsByCampaignId)
-		orderGroup.HandleInspect("investor", handlers.OrderInspectHandlers.FindOrdersByInvestor)
+		orderGroup.HandleInspect("investor", handlers.OrderInspectHandlers.FindOrdersByInvestorAddress)
 	}
 
 	campaignGroup := r.Group("campaign")
@@ -101,8 +101,8 @@ func NewShoalRollup(repo repository.Repository) *router.Router {
 		campaignGroup.HandleInspect("", handlers.CampaignInspectHandlers.FindAllCampaigns)
 		campaignGroup.HandleInspect("id", handlers.CampaignInspectHandlers.FindCampaignById)
 		campaignGroup.HandleAdvance("close", handlers.CampaignAdvanceHandlers.CloseCampaign)
-		campaignGroup.HandleInspect("creator", handlers.CampaignInspectHandlers.FindCampaignsByCreator)
-		campaignGroup.HandleInspect("investor", handlers.CampaignInspectHandlers.FindCampaignsByInvestor)
+		campaignGroup.HandleInspect("creator", handlers.CampaignInspectHandlers.FindCampaignsByCreatorAddress)
+		campaignGroup.HandleInspect("investor", handlers.CampaignInspectHandlers.FindCampaignsByInvestorAddress)
 		campaignGroup.HandleAdvance("execute-collateral", handlers.CampaignAdvanceHandlers.ExecuteCampaignCollateral)
 	}
 

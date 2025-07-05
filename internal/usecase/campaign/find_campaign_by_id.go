@@ -2,6 +2,7 @@ package campaign
 
 import (
 	"context"
+	"fmt"
 
 	"github.com/henriquemarlon/shoal/internal/domain/entity"
 	"github.com/henriquemarlon/shoal/internal/infra/repository"
@@ -12,11 +13,12 @@ type FindCampaignByIdInputDTO struct {
 }
 
 type FindCampaignByIdUseCase struct {
+	UserRepository     repository.UserRepository
 	CampaignRepository repository.CampaignRepository
 }
 
-func NewFindCampaignByIdUseCase(CampaignRepository repository.CampaignRepository) *FindCampaignByIdUseCase {
-	return &FindCampaignByIdUseCase{CampaignRepository: CampaignRepository}
+func NewFindCampaignByIdUseCase(userRepository repository.UserRepository, campaignRepository repository.CampaignRepository) *FindCampaignByIdUseCase {
+	return &FindCampaignByIdUseCase{UserRepository: userRepository, CampaignRepository: campaignRepository}
 }
 
 func (f *FindCampaignByIdUseCase) Execute(ctx context.Context, input *FindCampaignByIdInputDTO) (*FindCampaignOutputDTO, error) {
@@ -27,21 +29,28 @@ func (f *FindCampaignByIdUseCase) Execute(ctx context.Context, input *FindCampai
 	orders := make([]*entity.Order, len(res.Orders))
 	for i, order := range res.Orders {
 		orders[i] = &entity.Order{
-			Id:           order.Id,
-			CampaignId:   order.CampaignId,
-			BadgeChainId: order.BadgeChainId,
-			Investor:     order.Investor,
-			Amount:       order.Amount,
-			InterestRate: order.InterestRate,
-			State:        order.State,
-			CreatedAt:    order.CreatedAt,
-			UpdatedAt:    order.UpdatedAt,
+			Id:                 order.Id,
+			CampaignId:         order.CampaignId,
+			BadgeChainSelector: order.BadgeChainSelector,
+			Investor:           order.Investor,
+			Amount:             order.Amount,
+			InterestRate:       order.InterestRate,
+			State:              order.State,
+			CreatedAt:          order.CreatedAt,
+			UpdatedAt:          order.UpdatedAt,
 		}
+	}
+	creator, err := f.UserRepository.FindUserByAddress(ctx, res.Creator)
+	if err != nil {
+		return nil, fmt.Errorf("error finding creator: %w", err)
 	}
 	return &FindCampaignOutputDTO{
 		Id:                res.Id,
+		Title:             res.Title,
+		Description:       res.Description,
+		Promotion:         res.Promotion,
 		Token:             res.Token,
-		Creator:           res.Creator,
+		Creator:           creator,
 		CollateralAddress: res.CollateralAddress,
 		CollateralAmount:  res.CollateralAmount,
 		BadgeRouter:       res.BadgeRouter,

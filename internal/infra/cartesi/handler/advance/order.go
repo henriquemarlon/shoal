@@ -7,9 +7,9 @@ import (
 
 	"github.com/ethereum/go-ethereum/common"
 	"github.com/go-playground/validator/v10"
+	"github.com/rollmelette/rollmelette"
 	"github.com/henriquemarlon/shoal/internal/infra/repository"
 	"github.com/henriquemarlon/shoal/internal/usecase/order"
-	"github.com/rollmelette/rollmelette"
 )
 
 type OrderAdvanceHandlers struct {
@@ -43,6 +43,7 @@ func (h *OrderAdvanceHandlers) CreateOrder(env rollmelette.Env, metadata rollmel
 
 	ctx := context.Background()
 	createOrder := order.NewCreateOrderUseCase(
+		h.UserRepository,
 		h.OrderRepository,
 		h.CampaignRepository,
 	)
@@ -88,6 +89,7 @@ func (h *OrderAdvanceHandlers) CancelOrder(env rollmelette.Env, metadata rollmel
 
 	ctx := context.Background()
 	cancelOrder := order.NewCancelOrderUseCase(
+		h.UserRepository,
 		h.OrderRepository,
 		h.CampaignRepository,
 	)

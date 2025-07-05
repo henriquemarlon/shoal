@@ -12,6 +12,9 @@ import (
 )
 
 type CreateCampaignInputDTO struct {
+	Title           string              `json:"title" validate:"required"`
+	Description     string              `json:"description" validate:"required"`
+	Promotion       string              `json:"promotion" validate:"required"`
 	Token           custom_type.Address `json:"token" validate:"required"`
 	DebtIssued      *uint256.Int        `json:"debt_issued" validate:"required"`
 	MaxInterestRate *uint256.Int        `json:"max_interest_rate" validate:"required"`
@@ -23,8 +26,11 @@ type CreateCampaignInputDTO struct {
 
 type CreateCampaignOutputDTO struct {
 	Id                uint                `json:"id"`
+	Title             string              `json:"title,omitempty"`
+	Description       string              `json:"description,omitempty"`
+	Promotion         string              `json:"promotion,omitempty"`
 	Token             custom_type.Address `json:"token,omitempty"`
-	Creator           custom_type.Address `json:"creator,omitempty"`
+	Creator           *entity.User        `json:"creator,omitempty"`
 	CollateralAddress custom_type.Address `json:"collateral_address,omitempty"`
 	CollateralAmount  *uint256.Int        `json:"collateral_amount,omitempty"`
 	BadgeRouter       custom_type.Address `json:"badge_router,omitempty"`
@@ -68,7 +74,7 @@ func (c *CreateCampaignUseCase) Execute(ctx context.Context, input *CreateCampai
 		return nil, err
 	}
 
-	campaigns, err := c.CampaignRepository.FindCampaignsByCreator(ctx, custom_type.Address(erc20Deposit.Sender))
+	campaigns, err := c.CampaignRepository.FindCampaignsByCreatorAddress(ctx, custom_type.Address(erc20Deposit.Sender))
 	if err != nil {
 		return nil, fmt.Errorf("error retrieving Campaigns: %w", err)
 	}
@@ -79,6 +85,9 @@ func (c *CreateCampaignUseCase) Execute(ctx context.Context, input *CreateCampai
 	}
 
 	Campaign, err := entity.NewCampaign(
+		input.Title,
+		input.Description,
+		input.Promotion,
 		input.Token,
 		custom_type.Address(erc20Deposit.Sender),
 		custom_type.Address(erc20Deposit.Token),
@@ -100,10 +109,18 @@ func (c *CreateCampaignUseCase) Execute(ctx context.Context, input *CreateCampai
 		return nil, fmt.Errorf("error creating Campaign: %w", err)
 	}
 
+	creator, err := c.UserRepository.FindUserByAddress(ctx, custom_type.Address(erc20Deposit.Sender))
+	if err != nil {
+		return nil, fmt.Errorf("error finding creator: %w", err)
+	}
+
 	return &CreateCampaignOutputDTO{
 		Id:                createdCampaign.Id,
+		Title:             createdCampaign.Title,
+		Description:       createdCampaign.Description,
+		Promotion:         createdCampaign.Promotion,
 		Token:             createdCampaign.Token,
-		Creator:           createdCampaign.Creator,
+		Creator:           creator,
 		CollateralAddress: createdCampaign.CollateralAddress,
 		CollateralAmount:  createdCampaign.CollateralAmount,
 		BadgeRouter:       createdCampaign.BadgeRouter,

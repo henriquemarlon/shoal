@@ -14,11 +14,13 @@ type FindOrdersByStateInputDTO struct {
 type FindOrdersByStateOutputDTO []*FindOrderOutputDTO
 
 type FindOrdersByStateUseCase struct {
+	UserRepository  repository.UserRepository
 	OrderRepository repository.OrderRepository
 }
 
-func NewFindOrdersByStateUseCase(orderRepository repository.OrderRepository) *FindOrdersByStateUseCase {
+func NewFindOrdersByStateUseCase(userRepository repository.UserRepository, orderRepository repository.OrderRepository) *FindOrdersByStateUseCase {
 	return &FindOrdersByStateUseCase{
+		UserRepository:  userRepository,
 		OrderRepository: orderRepository,
 	}
 }
@@ -30,16 +32,20 @@ func (f *FindOrdersByStateUseCase) Execute(ctx context.Context, input *FindOrder
 	}
 	output := make(FindOrdersByStateOutputDTO, len(res))
 	for i, order := range res {
+		investor, err := f.UserRepository.FindUserByAddress(ctx, order.Investor)
+		if err != nil {
+			return nil, err
+		}
 		output[i] = &FindOrderOutputDTO{
-			Id:           order.Id,
-			CampaignId:   order.CampaignId,
-			BadgeChainId: order.BadgeChainId,
-			Investor:     order.Investor,
-			Amount:       order.Amount,
-			InterestRate: order.InterestRate,
-			State:        string(order.State),
-			CreatedAt:    order.CreatedAt,
-			UpdatedAt:    order.UpdatedAt,
+			Id:                 order.Id,
+			CampaignId:         order.CampaignId,
+			BadgeChainSelector: order.BadgeChainSelector,
+			Investor:           investor,
+			Amount:             order.Amount,
+			InterestRate:       order.InterestRate,
+			State:              string(order.State),
+			CreatedAt:          order.CreatedAt,
+			UpdatedAt:          order.UpdatedAt,
 		}
 	}
 	return output, nil

@@ -16,25 +16,27 @@ type CancelOrderInputDTO struct {
 }
 
 type CancelOrderOutputDTO struct {
-	Id           uint
-	CampaignId   uint
-	BadgeChainId uint64
-	Token        custom_type.Address
-	Investor     custom_type.Address
-	Amount       *uint256.Int
-	InterestRate *uint256.Int
-	State        string
-	CreatedAt    int64
-	UpdatedAt    int64
+	Id                 uint                `json:"id"`
+	CampaignId         uint                `json:"campaign_id"`
+	BadgeChainSelector *uint256.Int        `json:"badge_chain_selector"`
+	Token              custom_type.Address `json:"token"`
+	Investor           *entity.User        `json:"investor"`
+	Amount             *uint256.Int        `json:"amount"`
+	InterestRate       *uint256.Int        `json:"interest_rate"`
+	State              string              `json:"state"`
+	CreatedAt          int64               `json:"created_at"`
+	UpdatedAt          int64               `json:"updated_at"`
 }
 
 type CancelOrderUseCase struct {
+	UserRepository     repository.UserRepository
 	OrderRepository    repository.OrderRepository
 	CampaignRepository repository.CampaignRepository
 }
 
-func NewCancelOrderUseCase(orderRepository repository.OrderRepository, campaignRepository repository.CampaignRepository) *CancelOrderUseCase {
+func NewCancelOrderUseCase(userRepository repository.UserRepository, orderRepository repository.OrderRepository, campaignRepository repository.CampaignRepository) *CancelOrderUseCase {
 	return &CancelOrderUseCase{
+		UserRepository:     userRepository,
 		OrderRepository:    orderRepository,
 		CampaignRepository: campaignRepository,
 	}
@@ -60,16 +62,20 @@ func (c *CancelOrderUseCase) Execute(ctx context.Context, input *CancelOrderInpu
 	if err != nil {
 		return nil, err
 	}
+	investor, err := c.UserRepository.FindUserByAddress(ctx, res.Investor)
+	if err != nil {
+		return nil, err
+	}
 	return &CancelOrderOutputDTO{
-		Id:           res.Id,
-		CampaignId:   res.CampaignId,
-		BadgeChainId: res.BadgeChainId,
-		Token:        campaign.Token,
-		Investor:     res.Investor,
-		Amount:       res.Amount,
-		InterestRate: res.InterestRate,
-		State:        string(res.State),
-		CreatedAt:    res.CreatedAt,
-		UpdatedAt:    res.UpdatedAt,
+		Id:                 res.Id,
+		CampaignId:         res.CampaignId,
+		BadgeChainSelector: res.BadgeChainSelector,
+		Token:              campaign.Token,
+		Investor:           investor,
+		Amount:             res.Amount,
+		InterestRate:       res.InterestRate,
+		State:              string(res.State),
+		CreatedAt:          res.CreatedAt,
+		UpdatedAt:          res.UpdatedAt,
 	}, nil
 }

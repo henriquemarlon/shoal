@@ -12,13 +12,16 @@ import (
 )
 
 type ExecuteCampaignCollateralInputDTO struct {
-	CampaignId uint `json:"campaign_id" validate:"required"`
+	Id uint `json:"id" validate:"required"`
 }
 
 type ExecuteCampaignCollateralOutputDTO struct {
-	CampaignId        uint                `json:"campaign_id"`
+	Id                uint                `json:"id"`
+	Title             string              `json:"title,omitempty"`
+	Description       string              `json:"description,omitempty"`
+	Promotion         string              `json:"promotion,omitempty"`
 	Token             custom_type.Address `json:"token"`
-	Creator           custom_type.Address `json:"creator"`
+	Creator           *entity.User        `json:"creator"`
 	CollateralAddress custom_type.Address `json:"collateral_address"`
 	CollateralAmount  *uint256.Int        `json:"collateral_amount"`
 	BadgeRouter       custom_type.Address `json:"badge_router"`
@@ -36,19 +39,21 @@ type ExecuteCampaignCollateralOutputDTO struct {
 }
 
 type ExecuteCampaignCollateralUseCase struct {
+	UserRepository     repository.UserRepository
 	CampaignRepository repository.CampaignRepository
 	OrderRepository    repository.OrderRepository
 }
 
-func NewExecuteCampaignCollateralUseCase(campaignRepository repository.CampaignRepository, orderRepository repository.OrderRepository) *ExecuteCampaignCollateralUseCase {
+func NewExecuteCampaignCollateralUseCase(userRepository repository.UserRepository, campaignRepository repository.CampaignRepository, orderRepository repository.OrderRepository) *ExecuteCampaignCollateralUseCase {
 	return &ExecuteCampaignCollateralUseCase{
+		UserRepository:     userRepository,
 		CampaignRepository: campaignRepository,
 		OrderRepository:    orderRepository,
 	}
 }
 
 func (uc *ExecuteCampaignCollateralUseCase) Execute(ctx context.Context, input *ExecuteCampaignCollateralInputDTO, metadata rollmelette.Metadata) (*ExecuteCampaignCollateralOutputDTO, error) {
-	campaign, err := uc.CampaignRepository.FindCampaignById(ctx, input.CampaignId)
+	campaign, err := uc.CampaignRepository.FindCampaignById(ctx, input.Id)
 	if err != nil {
 		return nil, err
 	}
@@ -78,10 +83,18 @@ func (uc *ExecuteCampaignCollateralUseCase) Execute(ctx context.Context, input *
 		return nil, err
 	}
 
+	creator, err := uc.UserRepository.FindUserByAddress(ctx, res.Creator)
+	if err != nil {
+		return nil, fmt.Errorf("error finding creator: %w", err)
+	}
+
 	return &ExecuteCampaignCollateralOutputDTO{
-		CampaignId:        res.Id,
+		Id:                res.Id,
+		Title:             res.Title,
+		Description:       res.Description,
+		Promotion:         res.Promotion,
 		Token:             res.Token,
-		Creator:           res.Creator,
+		Creator:           creator,
 		CollateralAddress: res.CollateralAddress,
 		CollateralAmount:  res.CollateralAmount,
 		BadgeRouter:       res.BadgeRouter,

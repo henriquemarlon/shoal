@@ -12,29 +12,31 @@ import (
 )
 
 type CreateOrderInputDTO struct {
-	CampaignId   uint         `json:"campaign_id" validate:"required"`
-	BadgeChainId uint64       `json:"badge_chain_id" validate:"required"`
-	InterestRate *uint256.Int `json:"interest_rate" validate:"required"`
+	CampaignId         uint         `json:"campaign_id" validate:"required"`
+	BadgeChainSelector *uint256.Int `json:"badge_chain_selector" validate:"required"`
+	InterestRate       *uint256.Int `json:"interest_rate" validate:"required"`
 }
 
 type CreateOrderOutputDTO struct {
-	Id           uint                `json:"id"`
-	CampaignId   uint                `json:"campaign_id"`
-	BadgeChainId uint64              `json:"badge_chain_id"`
-	Investor     custom_type.Address `json:"investor"`
-	Amount       *uint256.Int        `json:"amount"`
-	InterestRate *uint256.Int        `json:"interest_rate"`
-	State        string              `json:"state"`
-	CreatedAt    int64               `json:"created_at"`
+	Id                 uint         `json:"id"`
+	CampaignId         uint         `json:"campaign_id"`
+	BadgeChainSelector *uint256.Int `json:"badge_chain_selector"`
+	Investor           *entity.User `json:"investor"`
+	Amount             *uint256.Int `json:"amount"`
+	InterestRate       *uint256.Int `json:"interest_rate"`
+	State              string       `json:"state"`
+	CreatedAt          int64        `json:"created_at"`
 }
 
 type CreateOrderUseCase struct {
+	UserRepository     repository.UserRepository
 	OrderRepository    repository.OrderRepository
 	CampaignRepository repository.CampaignRepository
 }
 
-func NewCreateOrderUseCase(orderRepository repository.OrderRepository, campaignRepository repository.CampaignRepository) *CreateOrderUseCase {
+func NewCreateOrderUseCase(userRepository repository.UserRepository, orderRepository repository.OrderRepository, campaignRepository repository.CampaignRepository) *CreateOrderUseCase {
 	return &CreateOrderUseCase{
+		UserRepository:     userRepository,
 		OrderRepository:    orderRepository,
 		CampaignRepository: campaignRepository,
 	}
@@ -65,7 +67,7 @@ func (c *CreateOrderUseCase) Execute(ctx context.Context, input *CreateOrderInpu
 
 	order, err := entity.NewOrder(
 		campaign.Id,
-		input.BadgeChainId,
+		input.BadgeChainSelector,
 		custom_type.Address(erc20Deposit.Sender),
 		uint256.MustFromBig(erc20Deposit.Value),
 		input.InterestRate,
@@ -80,14 +82,19 @@ func (c *CreateOrderUseCase) Execute(ctx context.Context, input *CreateOrderInpu
 		return nil, err
 	}
 
+	investor, err := c.UserRepository.FindUserByAddress(ctx, res.Investor)
+	if err != nil {
+		return nil, err
+	}
+
 	return &CreateOrderOutputDTO{
-		Id:           res.Id,
-		CampaignId:   res.CampaignId,
-		BadgeChainId: res.BadgeChainId,
-		Investor:     res.Investor,
-		Amount:       res.Amount,
-		InterestRate: res.InterestRate,
-		State:        string(res.State),
-		CreatedAt:    res.CreatedAt,
+		Id:                 res.Id,
+		CampaignId:         res.CampaignId,
+		BadgeChainSelector: res.BadgeChainSelector,
+		Investor:           investor,
+		Amount:             res.Amount,
+		InterestRate:       res.InterestRate,
+		State:              string(res.State),
+		CreatedAt:          res.CreatedAt,
 	}, nil
 }

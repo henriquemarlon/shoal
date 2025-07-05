@@ -88,7 +88,6 @@ generate: ## Generate the application code
 .PHONY: test
 test: ## Run the application tests
 	$(START_LOG)
-	@forge test -vvv --root ./contracts
 	@go generate ./...
 	@go test -p=1 ./... -coverprofile=./coverage.md -v
 	$(END_LOG)
@@ -136,14 +135,6 @@ assets: ## Deploy the assets contracts
 .PHONY: setup
 setup: ## Transfers ownership of a deployed SourceMinter contract to the shoal application address
 	@$(setup_application)
-
-.PHONY: info
-info: ## Show all deployed contracts addresses
-	$(START_LOG)
-	@forge script ./contracts/script/Helper.s.sol \
-		--root ./contracts \
-		-vvv
-	$(END_LOG)
 
 .PHONY: help
 help: ## Show help for each of the Makefile recipes

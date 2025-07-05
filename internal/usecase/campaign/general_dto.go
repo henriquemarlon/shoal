@@ -8,8 +8,11 @@ import (
 
 type FindCampaignOutputDTO struct {
 	Id                uint                `json:"id"`
+	Title             string              `json:"title,omitempty"`
+	Description       string              `json:"description,omitempty"`
+	Promotion         string              `json:"promotion,omitempty"`
 	Token             custom_type.Address `json:"token"`
-	Creator           custom_type.Address `json:"creator"`
+	Creator           *entity.User        `json:"creator"`
 	CollateralAddress custom_type.Address `json:"collateral_address"`
 	CollateralAmount  *uint256.Int        `json:"collateral_amount"`
 	BadgeRouter       custom_type.Address `json:"badge_router"`

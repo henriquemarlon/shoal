@@ -2,6 +2,7 @@ package campaign
 
 import (
 	"context"
+	"fmt"
 
 	"github.com/henriquemarlon/shoal/internal/domain/entity"
 	"github.com/henriquemarlon/shoal/internal/infra/repository"
@@ -9,21 +10,22 @@ import (
 )
 
 type FindCampaignsByInvestorInputDTO struct {
-	Investor custom_type.Address `json:"investor" validate:"required"`
+	InvestorAddress custom_type.Address `json:"investor_address" validate:"required"`
 }
 
 type FindCampaignsByInvestorOutputDTO []*FindCampaignOutputDTO
 
 type FindCampaignsByInvestorUseCase struct {
+	UserRepository     repository.UserRepository
 	CampaignRepository repository.CampaignRepository
 }
 
-func NewFindCampaignsByInvestorUseCase(CampaignRepository repository.CampaignRepository) *FindCampaignsByInvestorUseCase {
-	return &FindCampaignsByInvestorUseCase{CampaignRepository: CampaignRepository}
+func NewFindCampaignsByInvestorUseCase(userRepository repository.UserRepository, campaignRepository repository.CampaignRepository) *FindCampaignsByInvestorUseCase {
+	return &FindCampaignsByInvestorUseCase{UserRepository: userRepository, CampaignRepository: campaignRepository}
 }
 
 func (f *FindCampaignsByInvestorUseCase) Execute(ctx context.Context, input *FindCampaignsByInvestorInputDTO) (*FindCampaignsByInvestorOutputDTO, error) {
-	res, err := f.CampaignRepository.FindCampaignsByInvestor(ctx, input.Investor)
+	res, err := f.CampaignRepository.FindCampaignsByInvestorAddress(ctx, input.InvestorAddress)
 	if err != nil {
 		return nil, err
 	}
@@ -32,21 +34,28 @@ func (f *FindCampaignsByInvestorUseCase) Execute(ctx context.Context, input *Fin
 		orders := make([]*entity.Order, len(Campaign.Orders))
 		for j, order := range Campaign.Orders {
 			orders[j] = &entity.Order{
-				Id:           order.Id,
-				CampaignId:   order.CampaignId,
-				BadgeChainId: order.BadgeChainId,
-				Investor:     order.Investor,
-				Amount:       order.Amount,
-				InterestRate: order.InterestRate,
-				State:        order.State,
-				CreatedAt:    order.CreatedAt,
-				UpdatedAt:    order.UpdatedAt,
+				Id:                 order.Id,
+				CampaignId:         order.CampaignId,
+				BadgeChainSelector: order.BadgeChainSelector,
+				Investor:           order.Investor,
+				Amount:             order.Amount,
+				InterestRate:       order.InterestRate,
+				State:              order.State,
+				CreatedAt:          order.CreatedAt,
+				UpdatedAt:          order.UpdatedAt,
 			}
+		}
+		creator, err := f.UserRepository.FindUserByAddress(ctx, Campaign.Creator)
+		if err != nil {
+			return nil, fmt.Errorf("error finding creator: %w", err)
 		}
 		output[i] = &FindCampaignOutputDTO{
 			Id:                Campaign.Id,
+			Title:             Campaign.Title,
+			Description:       Campaign.Description,
+			Promotion:         Campaign.Promotion,
 			Token:             Campaign.Token,
-			Creator:           Campaign.Creator,
+			Creator:           creator,
 			CollateralAddress: Campaign.CollateralAddress,
 			CollateralAmount:  Campaign.CollateralAmount,
 			BadgeRouter:       Campaign.BadgeRouter,
