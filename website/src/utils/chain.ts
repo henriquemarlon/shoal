@@ -6,6 +6,7 @@ import {
   http,
   createWalletClient,
   custom,
+  type Chain,
 } from "viem";
 
 import {
@@ -15,7 +16,6 @@ import {
   cannon,
   base,
   baseSepolia,
-  Chain,
 } from "viem/chains";
 import {
   publicActionsL1,
@@ -48,6 +48,7 @@ export function getChain(chainId: number | string): Chain | null {
 export async function getClient(chainId: number) {
   const chain = getChain(chainId);
   if (!chain) return null;
+  
   return createPublicClient({
     chain: chain as any,
     transport: http(),
@@ -74,4 +75,15 @@ export async function getL2Client(nodeAddress: string) {
   return createCartesiPublicClient({
     transport: http(nodeAddress),
   });
+}
+
+export function parseChainId(chainId: string | number | undefined): number | null {
+  if (!chainId) return null;
+  if (typeof chainId === "number") return chainId;
+  if (typeof chainId === "string") {
+    const match = chainId.match(/eip155:(\d+)/);
+    if (match) return Number(match[1]);
+    if (!isNaN(Number(chainId))) return Number(chainId);
+  }
+  return null;
 }

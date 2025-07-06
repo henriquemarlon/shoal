@@ -29,9 +29,7 @@ export default function ProfileCard() {
               Connect Email
             </Button>
           )}
-          {email && (
-            <div className="text-gray-700 break-all text-sm">{email}</div>
-          )}
+          
         </div>
 
 

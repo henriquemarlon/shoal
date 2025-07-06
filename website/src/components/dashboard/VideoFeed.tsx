@@ -1,6 +1,26 @@
 import React, { useState } from "react";
 import { ChevronUp, ChevronDown } from "lucide-react";
 import { Dialog, DialogTrigger, DialogContent, DialogHeader, DialogTitle } from "@/components/ui/dialog";
+import { useWallets } from "@privy-io/react-auth";
+import { chains, getClient, getWalletClient } from "@/utils/chain";
+import { parseChainId } from "@/utils/chain";
+import { createWalletClient, custom } from "viem";
+import { walletActionsL1 } from "@cartesi/viem";
+import {
+  erc1155BatchPortalAddress,
+  erc1155SinglePortalAddress,
+  erc20PortalAddress,
+  erc721PortalAddress,
+} from "@cartesi/viem/abi";
+import {
+  BaseError,
+  erc20Abi,
+  erc721Abi,
+  parseAbi,
+  parseEther,
+  parseUnits,
+  toHex,
+} from "viem";
 
 // Mock de vídeos e informações
 const videos = [
@@ -59,6 +79,104 @@ export default function VideoFeed() {
   };
 
   const video = videos[current];
+
+  const [interestRate, setInterestRate] = useState("");
+  const [amount, setAmount] = useState("");
+
+  const {wallets} = useWallets();
+  const wallet = wallets[0];
+  const chainId = wallet?.chainId;
+
+
+  const depositErc20ToPortal = async (token: `0x${string}`, value: bigint) => {
+    try {
+      if (chainId) {
+        const parsedChainId = parseChainId(chainId);
+        if (!parsedChainId || !import.meta.env.VITE_CARTESI_APPLICATION_ADDRESS) return false;
+
+        // Use o embedded wallet do Privy se disponível
+        const privyWallet = wallets.find(w => w.walletClientType === 'privy');
+        let walletClient, address;
+
+        if (privyWallet) {
+          const provider = await privyWallet.getEthereumProvider();
+          address = privyWallet.address as `0x${string}`;
+          walletClient = createWalletClient({
+            account: address,
+            chain: chains[parsedChainId],
+            transport: custom(provider),
+          }).extend(walletActionsL1());
+
+        } else {
+          walletClient = await getWalletClient(parsedChainId);
+          if (walletClient) {
+            [address] = await walletClient.requestAddresses();
+            address = address as `0x${string}`;
+          }
+        }
+
+        const client = await getClient(parsedChainId);
+        if (!client || !walletClient || !address) return;
+
+        const portalAddress = erc20PortalAddress;
+
+        const currAllowance = await client.readContract({
+          address: token,
+          abi: erc20Abi,
+          functionName: "allowance",
+          args: [address, portalAddress],
+        });
+
+        if (currAllowance < value) {
+          const { request } = await client.simulateContract({
+            account: address,
+            address: token,
+            abi: erc20Abi,
+            functionName: "approve",
+            args: [portalAddress, value],
+          });
+          const txHash = await walletClient.writeContract(request);
+          await client.waitForTransactionReceipt({ hash: txHash });
+        }
+
+        const data = toHex(`Deposited (${value}) of ERC20 (${token}).`);
+
+        const txHash = await walletClient.depositERC20Tokens({
+          account: address,
+          token: token,
+          chain: chains[parsedChainId],
+          execLayerData: data,
+          amount: value,
+          application: portalAddress,
+        });
+
+        await client.waitForTransactionReceipt({ hash: txHash });
+      }
+    } catch (e) {
+      if (e instanceof BaseError) {
+        console.error(e.message);
+      } else {
+        console.error(e);
+      }
+    }
+  };
+
+  const handleSubmit = (e: React.FormEvent) => {
+    e.preventDefault();
+
+
+    const payload = JSON.stringify({ //VER COM HENRIQUE
+      path: "user/admin/create",
+      data: {
+        interest_rate: interestRate,
+        badge_chain_selector: "16015286601757825753??",
+      }
+    }) 
+
+    //{"campaign_id":1,"badge_chain_selector":"16015286601757825753","interest_rate":"9"}}
+    //const success = await depositErc20ToPortal("0x0000000000000000000000000000000000000000", BigInt(amount));
+
+  };
 
   return (
     <div className="flex justify-center items-center h-[90vh] gap-8 w-full">
@@ -153,31 +271,40 @@ export default function VideoFeed() {
               <DialogHeader>
                 <DialogTitle>{video.info.title}</DialogTitle>
               </DialogHeader>
-              <div className="mt-4 flex flex-col gap-4">
-                <div className="flex flex-col gap-1">
-                  <label className="text-sm font-medium">Interest Rate</label>
-                  <input
-                    type="number"
-                    min="0"
-                    step="0.01"
-                    placeholder="Enter interest rate (%)"
-                    className="border rounded px-2 py-1"
-                  />
+              <form onSubmit={handleSubmit}>
+                <div className="mt-4 flex flex-col gap-4">
+                  <div className="flex flex-col gap-1">
+                    <label className="text-sm font-medium">Interest Rate</label>
+                    <input
+                      type="number"
+                      min="0"
+                      step="0.01"
+                      placeholder="Enter interest rate (%)"
+                      className="border rounded px-2 py-1"
+                      value={interestRate}
+                      onChange={e => setInterestRate(e.target.value)}
+                    />
+                  </div>
+                  <div className="flex flex-col gap-1">
+                    <label className="text-sm font-medium">Amount</label>
+                    <input
+                      type="number"
+                      min="0"
+                      step="0.01"
+                      placeholder="Enter amount to invest"
+                      className="border rounded px-2 py-1"
+                      value={amount}
+                      onChange={e => setAmount(e.target.value)}
+                    />
+                  </div>
+                  <button
+                    type="submit"
+                    className="bg-[#FF533F] text-white px-4 py-2 rounded-md w-full cursor-pointer mt-2"
+                  >
+                    Invest
+                  </button>
                 </div>
-                <div className="flex flex-col gap-1">
-                  <label className="text-sm font-medium">Amount</label>
-                  <input
-                    type="number"
-                    min="0"
-                    step="0.01"
-                    placeholder="Enter amount to invest"
-                    className="border rounded px-2 py-1"
-                  />
-                </div>
-                <button className="bg-[#FF533F] text-white px-4 py-2 rounded-md w-full cursor-pointer mt-2">
-                  Invest
-                </button>
-              </div>
+              </form>
             </DialogContent>
           </Dialog>
         </div>
