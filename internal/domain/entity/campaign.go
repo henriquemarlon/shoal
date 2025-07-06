@@ -4,8 +4,8 @@ import (
 	"errors"
 	"fmt"
 
-	"github.com/holiman/uint256"
 	"github.com/henriquemarlon/shoal/pkg/custom_type"
+	"github.com/holiman/uint256"
 )
 
 var (

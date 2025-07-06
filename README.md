@@ -139,7 +139,7 @@ make delegatecall # Deploy delegatecall contracts
 > This section requires a Fly.io account and sufficient credits. Make sure you have set up your Fly.io CLI and authenticated before proceeding.
 
 ```bash
-fly app create rollups-node
+fly app create shoal-node
 ```
 
 ```bash
@@ -156,10 +156,22 @@ fly postgres attach rollups-node-database -a rollups-node
 Set environment variables for the rollup node:
 
 ```bash
-fly secrets set -a rollups-node CARTESI_BLOCKCHAIN_HTTP_ENDPOINT=<web3-provider-http-endpoint>
-fly secrets set -a rollups-node CARTESI_BLOCKCHAIN_WS_ENDPOINT=<web3-provider-ws-endpoint>
-fly secrets set -a rollups-node CARTESI_AUTH_MNEMONIC=<mnemonic>
-fly secrets set -a rollups-node CARTESI_DATABASE_CONNECTION=<connection_string>
+CARTESI_BLOCKCHAIN_HTTP_ENDPOINT=<web3-provider-http-endpoint>
+CARTESI_BLOCKCHAIN_WS_ENDPOINT=<web3-provider-ws-endpoint>
+CARTESI_AUTH_MNEMONIC=<mnemonic>
+CARTESI_DATABASE_CONNECTION=<connection_string>
+```
+
+Deploy Cartesi Rollups Node:
+
+```bash
+fly deploy -a shoal-node
+```
+
+Access the project via ssh:
+
+```bash
+fly ssh console
 ```
 
 Install required tools:
@@ -175,22 +187,18 @@ mise use -g go@1.24.4
 ```
 
 ```bash
-go install github.com/cartesi/rollups-node/cmd/cartesi-rollups-cli@85ee6814082bd668979f96fec7c01c816df29422
+go install github.com/cartesi/shoal-node/cmd/cartesi-rollups-cli@85ee6814082bd668979f96fec7c01c816df29422
 ```
 
 ### Deploy and register your application to the Node
 
 ```bash
-mkdir -p /var/lib/cartesi-rollups-node/snapshots/shoal
-curl -L https://github.com/henriquemarlon/shoal/releases/download/<version>/shoal-snapshot.tar.gz | tar -xz -C /var/lib/cartesi-rollups-node/snapshots/shoal
+mkdir -p /var/lib/cartesi-shoal-node/snapshots/shoal
+curl -L https://github.com/henriquemarlon/shoal/releases/download/v0.1.2-rc/shoal-snapshot.tar.gz | tar -xz -C /var/lib/cartesi-shoal-node/snapshots/shoal
 ```
 
 ```bash
-fly ssh console
-```
-
-```bash
-cartesi-rollups-cli deploy application shoal /var/lib/cartesi-rollups-node/snapshots/shoal --epoch-length 60
+cartesi-rollups-cli deploy application shoal /var/lib/cartesi-shoal-node/snapshots/shoal --epoch-length 60
 ```
 
 Output:
@@ -198,16 +206,17 @@ Output:
 ```bash
 Deploying application: shoal...success
 
-application address: 0x7901a3E412E61f616cdF88fbE295f3280D2bD7e0
-consensus address: 0xd1337c0689b02100Bd6BD6Ba1BFb9ca63CA4B4C6
+application address: 0xa2766E8151E56CF1f772fDbc0834b547dD473eA6
+consensus address: 0xe7e88be11fFe4A92a9908c422A3f8596616ec66E
 
 Registering application: shoal...success
+cartesi-rollups-cli app register -n shoal -a 0x01AB0640aca54048EED42b0AF6481a279260cCc4 -t /var/lib/cartesi-shoal-node/snapshots/shoal
 ```
 
 ### Setup application ownership
 
 > [!NOTE]
-> This step is required to link the deployed contracts with your Cartesi rollup application. Make sure you have the application address ready from the previous deployment step.
+> This step is required to link the deployed contracts with your Cartesi Rollups application. Make sure you have the application address ready from the previous deployment step.
 
 Transfer ownership of the deployed SourceMinter contract to the shoal application address:
 

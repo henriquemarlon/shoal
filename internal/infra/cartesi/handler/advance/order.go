@@ -7,9 +7,9 @@ import (
 
 	"github.com/ethereum/go-ethereum/common"
 	"github.com/go-playground/validator/v10"
-	"github.com/rollmelette/rollmelette"
 	"github.com/henriquemarlon/shoal/internal/infra/repository"
 	"github.com/henriquemarlon/shoal/internal/usecase/order"
+	"github.com/rollmelette/rollmelette"
 )
 
 type OrderAdvanceHandlers struct {

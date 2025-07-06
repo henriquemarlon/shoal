@@ -22,7 +22,7 @@ type CloseCampaignOutputDTO struct {
 	Description       string              `json:"description,omitempty"`
 	Promotion         string              `json:"promotion,omitempty"`
 	Token             custom_type.Address `json:"token,omitempty"`
-	Creator           *entity.User         `json:"creator,omitempty"`
+	Creator           *entity.User        `json:"creator,omitempty"`
 	CollateralAddress custom_type.Address `json:"collateral_address,omitempty"`
 	CollateralAmount  *uint256.Int        `json:"collateral_amount,omitempty"`
 	BadgeRouter       custom_type.Address `json:"badge_router,omitempty"`
