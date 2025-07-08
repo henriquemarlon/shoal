@@ -18,8 +18,8 @@ github.com/henriquemarlon/shoal/cmd/shoal-rollup/root/root.go:94.2,107.3 10 0
 github.com/henriquemarlon/shoal/cmd/shoal-rollup/root/root.go:109.2,110.2 2 0
 github.com/henriquemarlon/shoal/cmd/shoal-rollup/root/root.go:110.2,123.3 10 0
 github.com/henriquemarlon/shoal/cmd/shoal-rollup/root/root.go:125.2,126.2 2 0
-github.com/henriquemarlon/shoal/cmd/shoal-rollup/root/root.go:126.2,140.3 6 0
-github.com/henriquemarlon/shoal/cmd/shoal-rollup/root/root.go:141.2,141.10 1 0
+github.com/henriquemarlon/shoal/cmd/shoal-rollup/root/root.go:126.2,135.3 6 0
+github.com/henriquemarlon/shoal/cmd/shoal-rollup/root/root.go:136.2,136.10 1 0
 github.com/henriquemarlon/shoal/cmd/shoal-rollup/root/wire_gen.go:17.65,37.2 10 0
 github.com/henriquemarlon/shoal/configs/config.go:20.38,22.2 1 0
 github.com/henriquemarlon/shoal/configs/config.go:32.51,35.2 2 0

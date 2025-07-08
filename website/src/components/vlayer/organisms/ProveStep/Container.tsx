@@ -23,6 +23,7 @@ export const ProveStep = () => {
   useEffect(() => {
     if (webProof && isCallProverIdle) {
       void callProver([webProof, address, import.meta.env.VITE_CARTESI_APPLICATION_ADDRESS]);
+      
     }
   }, [webProof, address, callProver, isCallProverIdle]);
 

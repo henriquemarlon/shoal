@@ -1,4 +1,5 @@
 import { Link } from "react-router";
+
 export const SuccessStepPresentational = ({
   tx,
   handle,

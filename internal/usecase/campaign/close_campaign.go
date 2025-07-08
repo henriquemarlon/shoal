@@ -7,6 +7,7 @@ import (
 
 	"github.com/henriquemarlon/shoal/internal/domain/entity"
 	"github.com/henriquemarlon/shoal/internal/infra/repository"
+	"github.com/henriquemarlon/shoal/internal/usecase/user"
 	"github.com/henriquemarlon/shoal/pkg/custom_type"
 	"github.com/holiman/uint256"
 	"github.com/rollmelette/rollmelette"
@@ -22,7 +23,7 @@ type CloseCampaignOutputDTO struct {
 	Description       string              `json:"description,omitempty"`
 	Promotion         string              `json:"promotion,omitempty"`
 	Token             custom_type.Address `json:"token,omitempty"`
-	Creator           *entity.User        `json:"creator,omitempty"`
+	Creator           *user.UserOutputDTO `json:"creator,omitempty"`
 	CollateralAddress custom_type.Address `json:"collateral_address,omitempty"`
 	CollateralAmount  *uint256.Int        `json:"collateral_amount,omitempty"`
 	BadgeRouter       custom_type.Address `json:"badge_router,omitempty"`
@@ -192,12 +193,19 @@ func (u *CloseCampaignUseCase) Execute(ctx context.Context, input *CloseCampaign
 	}
 
 	return &CloseCampaignOutputDTO{
-		Id:                res.Id,
-		Title:             res.Title,
-		Description:       res.Description,
-		Promotion:         res.Promotion,
-		Token:             res.Token,
-		Creator:           creator,
+		Id:          res.Id,
+		Title:       res.Title,
+		Description: res.Description,
+		Promotion:   res.Promotion,
+		Token:       res.Token,
+		Creator: &user.UserOutputDTO{
+			Id:             creator.Id,
+			Role:           string(creator.Role),
+			Address:        creator.Address,
+			SocialAccounts: creator.SocialAccounts,
+			CreatedAt:      creator.CreatedAt,
+			UpdatedAt:      creator.UpdatedAt,
+		},
 		CollateralAddress: res.CollateralAddress,
 		CollateralAmount:  res.CollateralAmount,
 		BadgeRouter:       res.BadgeRouter,

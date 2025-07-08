@@ -13,8 +13,9 @@ export const SuccessStep = () => {
 
   useEffect(() => {
     const timeout = setTimeout(() => {
+      localStorage.setItem("verified", "true");
       navigate("/panel", { replace: true });
-    }, 10000);
+    }, 2000);
     return () => clearTimeout(timeout);
   }, [navigate]);
 

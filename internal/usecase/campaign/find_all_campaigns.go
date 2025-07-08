@@ -6,9 +6,10 @@ import (
 
 	"github.com/henriquemarlon/shoal/internal/domain/entity"
 	"github.com/henriquemarlon/shoal/internal/infra/repository"
+	"github.com/henriquemarlon/shoal/internal/usecase/user"
 )
 
-type FindAllCampaignsOutputDTO []*FindCampaignOutputDTO
+type FindAllCampaignsOutputDTO []*CampaignOutputDTO
 
 type FindAllCampaignsUseCase struct {
 	UserRepository     repository.UserRepository
@@ -44,13 +45,20 @@ func (f *FindAllCampaignsUseCase) Execute(ctx context.Context) (*FindAllCampaign
 		if err != nil {
 			return nil, fmt.Errorf("error finding creator: %w", err)
 		}
-		output[i] = &FindCampaignOutputDTO{
-			Id:                campaign.Id,
-			Title:             campaign.Title,
-			Description:       campaign.Description,
-			Promotion:         campaign.Promotion,
-			Token:             campaign.Token,
-			Creator:           creator,
+		output[i] = &CampaignOutputDTO{
+			Id:          campaign.Id,
+			Title:       campaign.Title,
+			Description: campaign.Description,
+			Promotion:   campaign.Promotion,
+			Token:       campaign.Token,
+			Creator: &user.UserOutputDTO{
+				Id:             creator.Id,
+				Role:           string(creator.Role),
+				Address:        creator.Address,
+				SocialAccounts: creator.SocialAccounts,
+				CreatedAt:      creator.CreatedAt,
+				UpdatedAt:      creator.UpdatedAt,
+			},
 			CollateralAddress: campaign.CollateralAddress,
 			CollateralAmount:  campaign.CollateralAmount,
 			BadgeRouter:       campaign.BadgeRouter,

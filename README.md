@@ -139,7 +139,7 @@ make delegatecall # Deploy delegatecall contracts
 > This section requires a Fly.io account and sufficient credits. Make sure you have set up your Fly.io CLI and authenticated before proceeding.
 
 ```bash
-fly app create shoal-node
+fly app create cartesinode
 ```
 
 ```bash
@@ -165,7 +165,7 @@ CARTESI_DATABASE_CONNECTION=<connection_string>
 Deploy Cartesi Rollups Node:
 
 ```bash
-fly deploy -a shoal-node
+fly deploy -a rollups-node
 ```
 
 Access the project via ssh:
@@ -187,18 +187,19 @@ mise use -g go@1.24.4
 ```
 
 ```bash
-go install github.com/cartesi/shoal-node/cmd/cartesi-rollups-cli@85ee6814082bd668979f96fec7c01c816df29422
+go install github.com/cartesi/rollups-node/cmd/cartesi-rollups-cli@85ee6814082bd668979f96fec7c01c816df29422
 ```
 
 ### Deploy and register your application to the Node
 
 ```bash
-mkdir -p /var/lib/cartesi-shoal-node/snapshots/shoal
-curl -L https://github.com/henriquemarlon/shoal/releases/download/v0.1.2-rc/shoal-snapshot.tar.gz | tar -xz -C /var/lib/cartesi-shoal-node/snapshots/shoal
+mkdir -p /var/lib/cartesi-rollups-node/snapshots/shoal
+curl -L https://github.com/henriquemarlon/shoal/releases/download/v0.1.0/shoal-snapshot.tar.gz | tar -xz -C /var/lib/cartesi-rollups-node/snapshots/shoal
 ```
 
+
 ```bash
-cartesi-rollups-cli deploy application shoal /var/lib/cartesi-shoal-node/snapshots/shoal --epoch-length 60
+cartesi-rollups-cli deploy application shoal /var/lib/cartesi-rollups-node/snapshots/image --epoch-length 516
 ```
 
 Output:
@@ -206,11 +207,10 @@ Output:
 ```bash
 Deploying application: shoal...success
 
-application address: 0xa2766E8151E56CF1f772fDbc0834b547dD473eA6
-consensus address: 0xe7e88be11fFe4A92a9908c422A3f8596616ec66E
+application address: 0x195A6053c6aDC27f9720549cF00B0e576D8Dc312
+consensus address: 0x08F3e119e458cE4E3f022CEE8C8F57d418d5e1Df
 
 Registering application: shoal...success
-cartesi-rollups-cli app register -n shoal -a 0x01AB0640aca54048EED42b0AF6481a279260cCc4 -t /var/lib/cartesi-shoal-node/snapshots/shoal
 ```
 
 ### Setup application ownership
@@ -236,4 +236,3 @@ Output:
 Compiler run successful!
 Enter application address: 
 ```
-

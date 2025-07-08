@@ -6,6 +6,7 @@ import (
 
 	"github.com/henriquemarlon/shoal/internal/domain/entity"
 	"github.com/henriquemarlon/shoal/internal/infra/repository"
+	"github.com/henriquemarlon/shoal/internal/usecase/user"
 	"github.com/henriquemarlon/shoal/pkg/custom_type"
 	"github.com/holiman/uint256"
 	"github.com/rollmelette/rollmelette"
@@ -20,7 +21,7 @@ type CancelOrderOutputDTO struct {
 	CampaignId         uint                `json:"campaign_id"`
 	BadgeChainSelector *uint256.Int        `json:"badge_chain_selector"`
 	Token              custom_type.Address `json:"token"`
-	Investor           *entity.User        `json:"investor"`
+	Investor           *user.UserOutputDTO `json:"investor"`
 	Amount             *uint256.Int        `json:"amount"`
 	InterestRate       *uint256.Int        `json:"interest_rate"`
 	State              string              `json:"state"`
@@ -71,11 +72,18 @@ func (c *CancelOrderUseCase) Execute(ctx context.Context, input *CancelOrderInpu
 		CampaignId:         res.CampaignId,
 		BadgeChainSelector: res.BadgeChainSelector,
 		Token:              campaign.Token,
-		Investor:           investor,
-		Amount:             res.Amount,
-		InterestRate:       res.InterestRate,
-		State:              string(res.State),
-		CreatedAt:          res.CreatedAt,
-		UpdatedAt:          res.UpdatedAt,
+		Investor: &user.UserOutputDTO{
+			Id:             investor.Id,
+			Role:           string(investor.Role),
+			Address:        investor.Address,
+			SocialAccounts: investor.SocialAccounts,
+			CreatedAt:      investor.CreatedAt,
+			UpdatedAt:      investor.UpdatedAt,
+		},
+		Amount:       res.Amount,
+		InterestRate: res.InterestRate,
+		State:        string(res.State),
+		CreatedAt:    res.CreatedAt,
+		UpdatedAt:    res.UpdatedAt,
 	}, nil
 }

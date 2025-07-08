@@ -11,7 +11,7 @@ type FindOrdersByStateInputDTO struct {
 	State      string `json:"state" validate:"required"`
 }
 
-type FindOrdersByStateOutputDTO []*FindOrderOutputDTO
+type FindOrdersByStateOutputDTO []*OrderOutputDTO
 
 type FindOrdersByStateUseCase struct {
 	UserRepository  repository.UserRepository
@@ -36,7 +36,7 @@ func (f *FindOrdersByStateUseCase) Execute(ctx context.Context, input *FindOrder
 		if err != nil {
 			return nil, err
 		}
-		output[i] = &FindOrderOutputDTO{
+		output[i] = &OrderOutputDTO{
 			Id:                 order.Id,
 			CampaignId:         order.CampaignId,
 			BadgeChainSelector: order.BadgeChainSelector,

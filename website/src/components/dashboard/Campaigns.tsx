@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect } from "react";
 import { Plus } from 'lucide-react';
 import {
   Dialog,
@@ -14,21 +14,129 @@ import { VerificationBanner } from "@/components/dashboard/VerificationBanner";
 import { useState } from "react";
 import { Modal } from "@/components/dashboard/Modal";
 import { Outlet } from "react-router-dom";
+import { toHex } from "viem";
+import { chains, parseChainId } from "@/utils/chain";
+import { useWallets } from "@privy-io/react-auth";
+import { createWalletClient, custom } from "viem";
+import { walletActionsL1 } from "@cartesi/viem";
+import { erc20Abi } from "viem";
+import { getWalletClient, getClient } from "@/utils/chain";
+import { BaseError } from "viem";
+import { erc20PortalAddress } from "@cartesi/viem/abi";
 
 const campaigns = [
   { id: 1, percent: 2, status: "Break-even not reached" },
-  { id: 2, percent: 2, status: "Break-even not reached" },
-  { id: 3, percent: 2, status: "Break-even reached" },
-  { id: 4, percent: 2, status: "Break-even reached" },
-  { id: 5, percent: 2, status: "Break-even reached" },
-  { id: 6, percent: 2, status: "Break-even reached" },
-  { id: 7, percent: 2, status: "Break-even reached" },
-  { id: 8, percent: 2, status: "Break-even reached" },
-  { id: 9, percent: 2, status: "Break-even reached" },
+  { id: 2, percent: 100, status: "Break-even reached" },
 ];
 
 export default function CampaignList() {
   const [verification, setVerification] = useState(false);
+  const { wallets } = useWallets();
+
+  useEffect(() => {
+    if(localStorage.getItem("verified") === "true"){
+      setVerification(true);
+    }
+  }, []);
+
+  const depositErc20ToPortal = async (token: `0x${string}`, value: bigint, dataPayload: any) => {
+    try {
+      const wallet = wallets[0];
+      const chainId = wallet?.chainId;
+
+      if (!chainId) return;
+
+      const parsedChainId = parseChainId(chainId);
+      if (!parsedChainId || !import.meta.env.VITE_CARTESI_APPLICATION_ADDRESS) return false;
+
+      // Use o embedded wallet do Privy se disponível
+      const privyWallet = wallets.find(w => w.walletClientType === 'privy');
+      let walletClient, address;
+
+      if (privyWallet) {
+        const provider = await privyWallet.getEthereumProvider();
+        address = privyWallet.address as `0x${string}`;
+
+        walletClient = createWalletClient({
+          account: address,
+          chain: chains[parsedChainId],
+          transport: custom(provider),
+        }).extend(walletActionsL1());
+      } else {
+        walletClient = await getWalletClient(parsedChainId);
+        if (walletClient) {
+          [address] = await walletClient.requestAddresses();
+          address = address as `0x${string}`;
+        }
+      }
+
+      const client = await getClient(parsedChainId);
+      if (!client || !walletClient || !address) return;
+
+      const portalAddress = erc20PortalAddress;
+
+      // Verifica allowance
+      const currAllowance = await client.readContract({
+        address: token,
+        abi: erc20Abi,
+        functionName: "allowance",
+        args: [address, portalAddress],
+      });
+
+      if (currAllowance < value) {
+        const { request } = await client.simulateContract({
+          account: address,
+          address: token,
+          abi: erc20Abi,
+          functionName: "approve",
+          args: [portalAddress, value],
+        });
+        const txHash = await walletClient.writeContract(request);
+        await client.waitForTransactionReceipt({ hash: txHash });
+      }
+
+      const data = toHex(JSON.stringify(dataPayload));
+
+      const txHash = await walletClient.depositERC20Tokens({
+        account: address,
+        token: token,
+        chain: chains[parsedChainId],
+        execLayerData: data,
+        amount: value,
+        application: portalAddress,
+      });
+
+      await client.waitForTransactionReceipt({ hash: txHash });
+    } catch (e) {
+      if (e instanceof BaseError) {
+        console.error(e.message);
+      } else {
+        console.error(e);
+      }
+    }
+  };
+
+  const handleCreateCampaign = async (e) => {
+    e.preventDefault();
+    const form = e.target;
+    const payload = {
+      path: "campaign/creator/create",
+      data: {
+        title: form["campaign-name"].value,
+        description: form["campaign-description"].value,
+        promotion: form["campaign-promotion"]?.value || "",
+        token: import.meta.env.VITE_COLATERAL_TOKEN,
+        max_interest_rate: form["max-interest-rate"].value,
+        debt_issued: form["debt-issued"].value,
+        badge_router: "0x4c3529aacE68b6F1cB514145a5058E5Dace69C75",
+        badge_minter: "0x4c3529aacE68b6F1cB514145a5058E5Dace69C75",
+        closes_at: Date.now(),
+        maturity_at: Date.now(),
+      },
+    };
+    const data = toHex(JSON.stringify(payload));
+    await depositErc20ToPortal("0x...", BigInt(payload.data.debt_issued), data);
+  };
 
   return (
     <div className="flex flex-col items-center">
@@ -61,7 +169,7 @@ export default function CampaignList() {
               <DialogHeader>
                 <DialogTitle>Create new campaign</DialogTitle>
               </DialogHeader>
-              <form className="flex flex-col gap-4">
+              <form onSubmit={handleCreateCampaign} className="flex flex-col gap-4">
                 <div className="flex flex-col gap-2">
                   <label htmlFor="campaign-name">Campaign name</label>
                   <input id="campaign-name" type="text" placeholder="Ex: Campaign Name" className="border rounded px-2 py-1" />
@@ -70,7 +178,11 @@ export default function CampaignList() {
                   <label htmlFor="campaign-description">Description</label>
                   <textarea id="campaign-description" placeholder="Describe your campaign..." rows={4} className="border rounded-lg px-2 py-1 resize-y min-h-[80px]" />
                 </div>
-                <VideoInput />
+                <div className="flex flex-col gap-2">
+                  <label htmlFor="campaign-description">Video Link</label>
+                  <input id="campaign-description" placeholder="Video url"  className="border rounded-lg px-2 py-1 py-1]" />
+                </div>
+
                 <div className="flex flex-col gap-2">
                   <label htmlFor="max-interest-rate">Max Interest Rate</label>
                   <input id="max-interest-rate" type="number" step="0.01" placeholder="Ex: 12.5" className="border rounded-lg px-2 py-1" />

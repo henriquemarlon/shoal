@@ -5,7 +5,7 @@ import (
 	"github.com/holiman/uint256"
 )
 
-type FindOrderOutputDTO struct {
+type OrderOutputDTO struct {
 	Id                 uint         `json:"id"`
 	CampaignId         uint         `json:"campaign_id"`
 	BadgeChainSelector *uint256.Int `json:"badge_chain_selector"`

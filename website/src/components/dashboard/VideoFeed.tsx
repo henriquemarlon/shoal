@@ -25,12 +25,12 @@ import {
 // Mock de vídeos e informações
 const videos = [
   {
-    url: "https://www.youtube.com/shorts/PxQc801W7z4",
+    url: "https://www.youtube.com/shorts/YEYH4H6mzuw",
     info: {
-      title: "Exemplo de Short",
-      creator: "Canal Exemplo",
-      date: "12/07/2024",
-      description: "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. ",
+      title: "Makeup with Brenda",
+      creator: "Brenda Stuart",
+      date: "06/07/2025",
+      description: "“Cosmic Canvas” translates Brenda Stuart’s bold, camera-ready style into a credible, scalable beauty line. The collection centres on talc-free, high-pigment eye palettes, a vitamin-enriched lip oil that doubles as gloss, and refillable, aluminium compacts that cut packaging waste by 60 %. All formulas are vegan, dermatologically tested and EU-compliant, mirroring Brenda’s transparency with her 12-million, 8 %-engagement community. ",
       maxInterestRate: "10%",
       debtIssued: "1.000.000,00",
       maturityDate: "09/09/2025",
@@ -139,13 +139,29 @@ export default function VideoFeed() {
           await client.waitForTransactionReceipt({ hash: txHash });
         }
 
-        const data = toHex(`Deposited (${value}) of ERC20 (${token}).`);
+        const data = {
+          path: "campaign/creator/create",
+          data: {
+            title,
+            description,
+            promotion,
+            token,
+            max_interest_rate,
+            debt_issued,
+            badge_router,
+            badge_minter,
+            closes_at,
+            maturity_at,
+          },
+        };
+
+        const dataHex = toHex(data);
 
         const txHash = await walletClient.depositERC20Tokens({
           account: address,
           token: token,
           chain: chains[parsedChainId],
-          execLayerData: data,
+          execLayerData: dataHex,
           amount: value,
           application: portalAddress,
         });
@@ -161,21 +177,39 @@ export default function VideoFeed() {
     }
   };
 
-  const handleSubmit = (e: React.FormEvent) => {
+  const handleCreateCampaign = async (e) => {
     e.preventDefault();
 
+    // Pegue os valores do formulário (exemplo usando refs ou state)
+    const title = e.target["campaign-name"].value;
+    const description = e.target["campaign-description"].value;
+    const promotion = e.target["campaign-promotion"].value; // Adapte conforme seu campo
+    const token = "0x..."; //
+    const max_interest_rate = e.target["max-interest-rate"].value;
+    const debt_issued = e.target["debt-issued"].value;
+    const badge_router = "0x..."; // Pegue do seu contexto/config
+    const badge_minter = "0x..."; // Pegue do seu contexto/config
+    const closes_at = Date.parse(e.target["closes-at"].value) / 1000; // timestamp
+    const maturity_at = Date.parse(e.target["maturity-at"].value) / 1000; // timestamp
 
-    const payload = JSON.stringify({ //VER COM HENRIQUE
-      path: "user/admin/create",
+    const payload = {
+      path: "campaign/creator/create",
       data: {
-        interest_rate: interestRate,
-        badge_chain_selector: "16015286601757825753??",
-      }
-    }) 
+        title,
+        description,
+        promotion,
+        token,
+        max_interest_rate,
+        debt_issued,
+        badge_router,
+        badge_minter,
+        closes_at,
+        maturity_at,
+      },
+    };
 
-    //{"campaign_id":1,"badge_chain_selector":"16015286601757825753","interest_rate":"9"}}
-    //const success = await depositErc20ToPortal("0x0000000000000000000000000000000000000000", BigInt(amount));
-
+    // Envie para o contrato (exemplo)
+    await depositErc20ToPortal(JSON.stringify(payload), Number(debt_issued));
   };
 
   return (
@@ -271,7 +305,7 @@ export default function VideoFeed() {
               <DialogHeader>
                 <DialogTitle>{video.info.title}</DialogTitle>
               </DialogHeader>
-              <form onSubmit={handleSubmit}>
+              <form onSubmit={handleCreateCampaign}>
                 <div className="mt-4 flex flex-col gap-4">
                   <div className="flex flex-col gap-1">
                     <label className="text-sm font-medium">Interest Rate</label>

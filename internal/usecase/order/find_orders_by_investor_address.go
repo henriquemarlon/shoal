@@ -11,7 +11,7 @@ type FindOrdersByInvestorAddressInputDTO struct {
 	InvestorAddress custom_type.Address `json:"investor_address" validate:"required"`
 }
 
-type FindOrdersByInvestorAddressOutputDTO []*FindOrderOutputDTO
+type FindOrdersByInvestorAddressOutputDTO []*OrderOutputDTO
 
 type FindOrdersByInvestorAddressUseCase struct {
 	UserRepository  repository.UserRepository
@@ -36,7 +36,7 @@ func (o *FindOrdersByInvestorAddressUseCase) Execute(ctx context.Context, input 
 		if err != nil {
 			return nil, err
 		}
-		output[i] = &FindOrderOutputDTO{
+		output[i] = &OrderOutputDTO{
 			Id:                 order.Id,
 			CampaignId:         order.CampaignId,
 			BadgeChainSelector: order.BadgeChainSelector,

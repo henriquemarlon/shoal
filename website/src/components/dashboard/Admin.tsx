@@ -122,15 +122,6 @@ const Admin = () => {
     }
   }
 
-  function handleApprove(user: any) {
-    console.log({
-      path: "user/admin/create",
-      data: {
-        address: user.wallet,
-        role: user.role,
-      }
-    });
-  }
 
   return (
     <div className="flex flex-col min-h-[60vh]  w-full mx-auto px-4">
@@ -155,6 +146,7 @@ const Admin = () => {
               <SelectContent>
                 <SelectItem value="creator">Creator</SelectItem>
                 <SelectItem value="investor">Investor</SelectItem>
+                <SelectItem value="admin">Admin</SelectItem>
               </SelectContent>
             </Select>
           </div>
@@ -177,7 +169,7 @@ const Admin = () => {
         </div>
       </form>
 
-      <div className="w-full bg-gray-50 rounded-lg shadow-md p-4">
+      {/* <div className="w-full bg-gray-50 rounded-lg shadow-md p-4">
       <div className="text-lg font-bold mb-1">Approve Users</div>
         <div className="w-full">
           <Table>
@@ -212,7 +204,7 @@ const Admin = () => {
             </TableBody>
           </Table>
         </div>
-      </div>
+      </div> */}
     </div>
   );
 };

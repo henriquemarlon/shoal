@@ -6,7 +6,7 @@ import (
 	"github.com/henriquemarlon/shoal/internal/infra/repository"
 )
 
-type FindAllOrdersOutputDTO []*FindOrderOutputDTO
+type FindAllOrdersOutputDTO []*OrderOutputDTO
 
 type FindAllOrdersUseCase struct {
 	UserRepository  repository.UserRepository
@@ -31,7 +31,7 @@ func (f *FindAllOrdersUseCase) Execute(ctx context.Context) (*FindAllOrdersOutpu
 		if err != nil {
 			return nil, err
 		}
-		output[i] = &FindOrderOutputDTO{
+		output[i] = &OrderOutputDTO{
 			Id:                 order.Id,
 			CampaignId:         order.CampaignId,
 			BadgeChainSelector: order.BadgeChainSelector,

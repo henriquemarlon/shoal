@@ -22,7 +22,7 @@ func NewFindOrderByIdUseCase(userRepository repository.UserRepository, orderRepo
 	}
 }
 
-func (c *FindOrderByIdUseCase) Execute(ctx context.Context, input *FindOrderByIdInputDTO) (*FindOrderOutputDTO, error) {
+func (c *FindOrderByIdUseCase) Execute(ctx context.Context, input *FindOrderByIdInputDTO) (*OrderOutputDTO, error) {
 	res, err := c.OrderRepository.FindOrderById(ctx, input.Id)
 	if err != nil {
 		return nil, err
@@ -31,7 +31,7 @@ func (c *FindOrderByIdUseCase) Execute(ctx context.Context, input *FindOrderById
 	if err != nil {
 		return nil, err
 	}
-	return &FindOrderOutputDTO{
+	return &OrderOutputDTO{
 		Id:                 res.Id,
 		CampaignId:         res.CampaignId,
 		BadgeChainSelector: res.BadgeChainSelector,

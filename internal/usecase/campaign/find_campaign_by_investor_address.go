@@ -6,6 +6,7 @@ import (
 
 	"github.com/henriquemarlon/shoal/internal/domain/entity"
 	"github.com/henriquemarlon/shoal/internal/infra/repository"
+	"github.com/henriquemarlon/shoal/internal/usecase/user"
 	"github.com/henriquemarlon/shoal/pkg/custom_type"
 )
 
@@ -13,7 +14,7 @@ type FindCampaignsByInvestorInputDTO struct {
 	InvestorAddress custom_type.Address `json:"investor_address" validate:"required"`
 }
 
-type FindCampaignsByInvestorOutputDTO []*FindCampaignOutputDTO
+type FindCampaignsByInvestorOutputDTO []*CampaignOutputDTO
 
 type FindCampaignsByInvestorUseCase struct {
 	UserRepository     repository.UserRepository
@@ -30,9 +31,9 @@ func (f *FindCampaignsByInvestorUseCase) Execute(ctx context.Context, input *Fin
 		return nil, err
 	}
 	output := make(FindCampaignsByInvestorOutputDTO, len(res))
-	for i, Campaign := range res {
-		orders := make([]*entity.Order, len(Campaign.Orders))
-		for j, order := range Campaign.Orders {
+	for i, campaign := range res {
+		orders := make([]*entity.Order, len(campaign.Orders))
+		for j, order := range campaign.Orders {
 			orders[j] = &entity.Order{
 				Id:                 order.Id,
 				CampaignId:         order.CampaignId,
@@ -45,31 +46,38 @@ func (f *FindCampaignsByInvestorUseCase) Execute(ctx context.Context, input *Fin
 				UpdatedAt:          order.UpdatedAt,
 			}
 		}
-		creator, err := f.UserRepository.FindUserByAddress(ctx, Campaign.Creator)
+		creator, err := f.UserRepository.FindUserByAddress(ctx, campaign.Creator)
 		if err != nil {
 			return nil, fmt.Errorf("error finding creator: %w", err)
 		}
-		output[i] = &FindCampaignOutputDTO{
-			Id:                Campaign.Id,
-			Title:             Campaign.Title,
-			Description:       Campaign.Description,
-			Promotion:         Campaign.Promotion,
-			Token:             Campaign.Token,
-			Creator:           creator,
-			CollateralAddress: Campaign.CollateralAddress,
-			CollateralAmount:  Campaign.CollateralAmount,
-			BadgeRouter:       Campaign.BadgeRouter,
-			BadgeMinter:       Campaign.BadgeMinter,
-			DebtIssued:        Campaign.DebtIssued,
-			MaxInterestRate:   Campaign.MaxInterestRate,
-			TotalObligation:   Campaign.TotalObligation,
-			TotalRaised:       Campaign.TotalRaised,
-			State:             string(Campaign.State),
+		output[i] = &CampaignOutputDTO{
+			Id:          campaign.Id,
+			Title:       campaign.Title,
+			Description: campaign.Description,
+			Promotion:   campaign.Promotion,
+			Token:       campaign.Token,
+			Creator: &user.UserOutputDTO{
+				Id:             creator.Id,
+				Role:           string(creator.Role),
+				Address:        creator.Address,
+				SocialAccounts: creator.SocialAccounts,
+				CreatedAt:      creator.CreatedAt,
+				UpdatedAt:      creator.UpdatedAt,
+			},
+			CollateralAddress: campaign.CollateralAddress,
+			CollateralAmount:  campaign.CollateralAmount,
+			BadgeRouter:       campaign.BadgeRouter,
+			BadgeMinter:       campaign.BadgeMinter,
+			DebtIssued:        campaign.DebtIssued,
+			MaxInterestRate:   campaign.MaxInterestRate,
+			TotalObligation:   campaign.TotalObligation,
+			TotalRaised:       campaign.TotalRaised,
+			State:             string(campaign.State),
 			Orders:            orders,
-			CreatedAt:         Campaign.CreatedAt,
-			ClosesAt:          Campaign.ClosesAt,
-			MaturityAt:        Campaign.MaturityAt,
-			UpdatedAt:         Campaign.UpdatedAt,
+			CreatedAt:         campaign.CreatedAt,
+			ClosesAt:          campaign.ClosesAt,
+			MaturityAt:        campaign.MaturityAt,
+			UpdatedAt:         campaign.UpdatedAt,
 		}
 	}
 	return &output, nil

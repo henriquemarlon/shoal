@@ -129,11 +129,6 @@ func NewShoalRollup(repo repository.Repository) *router.Router {
 		verifierGroup.HandleAdvance("create", handlers.SocialAccountsHandlers.CreateSocialAccount)
 		verifierGroup.HandleAdvance("delete", handlers.SocialAccountsHandlers.DeleteSocialAccount)
 
-		// creatorGroup := socialGroup.Group("creator")
-		// creatorGroup.Use(rbacFactory.CreatorOnly())
-		// creatorGroup.HandleAdvance("create", handlers.SocialAccountsHandlers.CreateSocialAccount)
-		// creatorGroup.HandleAdvance("delete", handlers.SocialAccountsHandlers.DeleteSocialAccount)
-
 		// Public operations
 		socialGroup.HandleInspect("id", handlers.SocialAccountHandlers.FindSocialAccountById)
 		socialGroup.HandleInspect("user/id", handlers.SocialAccountHandlers.FindSocialAccountsByUserId)

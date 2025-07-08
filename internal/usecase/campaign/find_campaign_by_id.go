@@ -6,6 +6,7 @@ import (
 
 	"github.com/henriquemarlon/shoal/internal/domain/entity"
 	"github.com/henriquemarlon/shoal/internal/infra/repository"
+	user "github.com/henriquemarlon/shoal/internal/usecase/user"
 )
 
 type FindCampaignByIdInputDTO struct {
@@ -21,7 +22,7 @@ func NewFindCampaignByIdUseCase(userRepository repository.UserRepository, campai
 	return &FindCampaignByIdUseCase{UserRepository: userRepository, CampaignRepository: campaignRepository}
 }
 
-func (f *FindCampaignByIdUseCase) Execute(ctx context.Context, input *FindCampaignByIdInputDTO) (*FindCampaignOutputDTO, error) {
+func (f *FindCampaignByIdUseCase) Execute(ctx context.Context, input *FindCampaignByIdInputDTO) (*CampaignOutputDTO, error) {
 	res, err := f.CampaignRepository.FindCampaignById(ctx, input.Id)
 	if err != nil {
 		return nil, err
@@ -44,13 +45,20 @@ func (f *FindCampaignByIdUseCase) Execute(ctx context.Context, input *FindCampai
 	if err != nil {
 		return nil, fmt.Errorf("error finding creator: %w", err)
 	}
-	return &FindCampaignOutputDTO{
-		Id:                res.Id,
-		Title:             res.Title,
-		Description:       res.Description,
-		Promotion:         res.Promotion,
-		Token:             res.Token,
-		Creator:           creator,
+	return &CampaignOutputDTO{
+		Id:          res.Id,
+		Title:       res.Title,
+		Description: res.Description,
+		Promotion:   res.Promotion,
+		Token:       res.Token,
+		Creator: &user.UserOutputDTO{
+			Id:             creator.Id,
+			Role:           string(creator.Role),
+			Address:        creator.Address,
+			SocialAccounts: creator.SocialAccounts,
+			CreatedAt:      creator.CreatedAt,
+			UpdatedAt:      creator.UpdatedAt,
+		},
 		CollateralAddress: res.CollateralAddress,
 		CollateralAmount:  res.CollateralAmount,
 		BadgeRouter:       res.BadgeRouter,

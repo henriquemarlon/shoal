@@ -1,6 +1,4 @@
-app = 'rollups-node'
-
-region = 'ams'
+app = 'cartesi-rollups-node'
 
 [build]
   image = 'ghcr.io/sunodo/sunodo-node:pr-198'

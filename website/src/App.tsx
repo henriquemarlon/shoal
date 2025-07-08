@@ -25,6 +25,7 @@ const App: FC = () => {
              {/* Admin */}
             <Route path="/admin" element={<AdminPage />}>
               <Route index element={<Admin />} />
+              <Route path="profile" element={<ProfilePage />} /> 
             </Route>
 
             {/* Investor Panel */}

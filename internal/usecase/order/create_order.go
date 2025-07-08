@@ -6,6 +6,7 @@ import (
 
 	"github.com/henriquemarlon/shoal/internal/domain/entity"
 	"github.com/henriquemarlon/shoal/internal/infra/repository"
+	"github.com/henriquemarlon/shoal/internal/usecase/user"
 	"github.com/henriquemarlon/shoal/pkg/custom_type"
 	"github.com/holiman/uint256"
 	"github.com/rollmelette/rollmelette"
@@ -18,14 +19,14 @@ type CreateOrderInputDTO struct {
 }
 
 type CreateOrderOutputDTO struct {
-	Id                 uint         `json:"id"`
-	CampaignId         uint         `json:"campaign_id"`
-	BadgeChainSelector *uint256.Int `json:"badge_chain_selector"`
-	Investor           *entity.User `json:"investor"`
-	Amount             *uint256.Int `json:"amount"`
-	InterestRate       *uint256.Int `json:"interest_rate"`
-	State              string       `json:"state"`
-	CreatedAt          int64        `json:"created_at"`
+	Id                 uint                `json:"id"`
+	CampaignId         uint                `json:"campaign_id"`
+	BadgeChainSelector *uint256.Int        `json:"badge_chain_selector"`
+	Investor           *user.UserOutputDTO `json:"investor"`
+	Amount             *uint256.Int        `json:"amount"`
+	InterestRate       *uint256.Int        `json:"interest_rate"`
+	State              string              `json:"state"`
+	CreatedAt          int64               `json:"created_at"`
 }
 
 type CreateOrderUseCase struct {
@@ -91,10 +92,17 @@ func (c *CreateOrderUseCase) Execute(ctx context.Context, input *CreateOrderInpu
 		Id:                 res.Id,
 		CampaignId:         res.CampaignId,
 		BadgeChainSelector: res.BadgeChainSelector,
-		Investor:           investor,
-		Amount:             res.Amount,
-		InterestRate:       res.InterestRate,
-		State:              string(res.State),
-		CreatedAt:          res.CreatedAt,
+		Investor: &user.UserOutputDTO{
+			Id:             investor.Id,
+			Role:           string(investor.Role),
+			Address:        investor.Address,
+			SocialAccounts: investor.SocialAccounts,
+			CreatedAt:      investor.CreatedAt,
+			UpdatedAt:      investor.UpdatedAt,
+		},
+		Amount:       res.Amount,
+		InterestRate: res.InterestRate,
+		State:        string(res.State),
+		CreatedAt:    res.CreatedAt,
 	}, nil
 }

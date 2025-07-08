@@ -14,6 +14,8 @@ interface SidebarProps {
 const sidebarOptions: Record<Role, { label: string; path: string }[]> = {
   admin: [
     { label: "Dashboard", path: "/admin" },
+    { label: "Profile", path: "/admin/profile" },
+
   ],
   investor: [
     { label: "Feed", path: "/investor" },
@@ -50,6 +52,9 @@ const Sidebar: FC<SidebarProps> = ({ role }) => {
     }
     if (path === "/investor/profile") {
       return location.pathname.startsWith("/investor/profile");
+    }
+    if (path === "/admin/profile"){
+      return location.pathname.startsWith("/admin/profile");
     }
     return location.pathname === path;
   };
@@ -97,6 +102,7 @@ const Sidebar: FC<SidebarProps> = ({ role }) => {
           <button
             className="bg-red-100 cursor-pointer w-full gap-2 flex justify-center items-center px-4 py-2 rounded-lg transition text-red-500 "
             onClick={async () => {
+              localStorage.removeItem('userVerified');
               await logout();
               navigate('/login', { replace: true });
             }}

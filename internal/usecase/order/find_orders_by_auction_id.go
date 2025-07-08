@@ -10,7 +10,7 @@ type FindOrdersByCampaignIdInputDTO struct {
 	CampaignId uint `json:"campaign_id" validate:"required"`
 }
 
-type FindOrdersByCampaignIdOutputDTO []*FindOrderOutputDTO
+type FindOrdersByCampaignIdOutputDTO []*OrderOutputDTO
 
 type FindOrdersByCampaignIdUseCase struct {
 	UserRepository  repository.UserRepository
@@ -35,7 +35,7 @@ func (c *FindOrdersByCampaignIdUseCase) Execute(ctx context.Context, input *Find
 		if err != nil {
 			return nil, err
 		}
-		output[i] = &FindOrderOutputDTO{
+		output[i] = &OrderOutputDTO{
 			Id:                 order.Id,
 			CampaignId:         order.CampaignId,
 			BadgeChainSelector: order.BadgeChainSelector,
