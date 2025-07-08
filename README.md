@@ -1,6 +1,6 @@
 <br>
 <p align="center">
-    <img src="" align="center" width="20%">
+    <img src="https://github.com/user-attachments/assets/d4dd04e4-8cbe-4095-aea4-56549c6e06d3" align="center" width="20%">
 </p>
 <br>
 
@@ -12,8 +12,8 @@
 </div>
 <br>
 <p align="center">
-	<img src="https://img.shields.io/github/license/henriquemarlon/shoal?style=default&logo=opensourceinitiative&logoColor=white&color=959CD0" alt="license">
-	<img src="https://img.shields.io/github/last-commit/henriquemarlon/shoal?style=default&logo=git&logoColor=white&color=D1DCCB" alt="last-commit">
+	<img src="https://img.shields.io/github/license/henriquemarlon/shoal?style=default&logo=opensourceinitiative&logoColor=white&color=1E1E1E" alt="license">
+	<img src="https://img.shields.io/github/last-commit/henriquemarlon/shoal?style=default&logo=git&logoColor=white&color=FF533F" alt="last-commit">
 </p>
 
 > [!CAUTION]
