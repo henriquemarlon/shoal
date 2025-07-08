@@ -12,8 +12,8 @@
 </div>
 <br>
 <p align="center">
-	<img src="https://img.shields.io/github/license/henriquemarlon/shoal?style=default&logo=opensourceinitiative&logoColor=white&color=959CD0" alt="license">
-	<img src="https://img.shields.io/github/last-commit/henriquemarlon/shoal?style=default&logo=git&logoColor=white&color=D1DCCB" alt="last-commit">
+	<img src="https://img.shields.io/github/license/henriquemarlon/shoal?style=default&logo=opensourceinitiative&logoColor=white&color=1E1E1E" alt="license">
+	<img src="https://img.shields.io/github/last-commit/henriquemarlon/shoal?style=default&logo=git&logoColor=white&color=FF533F" alt="last-commit">
 </p>
 
 > [!CAUTION]
