@@ -67,11 +67,11 @@ func (s *ShoalRollupSuite) TestCreateCampaign() {
 	s.Equal(expectedCreateSocialAccountOutput, string(createSocialAccountOutput.Notices[0].Payload))
 
 	// create campaign
-	createCampaignInput := []byte(fmt.Sprintf(`{"path":"campaign/creator/create","data":{"title":"test","description":"test","promotion":"test","token":"%s","max_interest_rate":"10","debt_issued":"100000","badge_router":"%s","badge_minter":"%s","closes_at":%d,"maturity_at":%d}}`, token, badgeRouter, badgeMinter, closesAt, maturityAt))
+	createCampaignInput := []byte(fmt.Sprintf(`{"path":"campaign/creator/create","data":{"title":"test","description":"testtesttesttesttest","promotion":"testtesttesttesttest","token":"%s","max_interest_rate":"10","debt_issued":"100000","badge_router":"%s","badge_minter":"%s","closes_at":%d,"maturity_at":%d}}`, token, badgeRouter, badgeMinter, closesAt, maturityAt))
 	createCampaignOutput := s.Tester.DepositERC20(collateral, creator, big.NewInt(10000), createCampaignInput)
 	s.Len(createCampaignOutput.Notices, 1)
 
-	expectedCreateCampaignOutput := fmt.Sprintf(`campaign created - {"id":1,"title":"test","description":"test","promotion":"test","token":"%s","creator":{"id":3,"role":"creator","address":"%s","social_accounts":[{"id":1,"user_id":3,"username":"test","platform":"twitter","created_at":%d}],"created_at":%d},"collateral_address":"%s","collateral_amount":"10000","badge_router":"%s","badge_minter":"%s","debt_issued":"100000","max_interest_rate":"10","state":"ongoing","orders":[],"created_at":%d,"closes_at":%d,"maturity_at":%d}`,
+	expectedCreateCampaignOutput := fmt.Sprintf(`campaign created - {"id":1,"title":"test","description":"testtesttesttesttest","promotion":"testtesttesttesttest","token":"%s","creator":{"id":3,"role":"creator","address":"%s","social_accounts":[{"id":1,"user_id":3,"username":"test","platform":"twitter","created_at":%d}],"created_at":%d,"updated_at":0},"collateral_address":"%s","collateral_amount":"10000","badge_router":"%s","badge_minter":"%s","debt_issued":"100000","max_interest_rate":"10","state":"ongoing","orders":[],"created_at":%d,"closes_at":%d,"maturity_at":%d}`,
 		token.Hex(),
 		creator.Hex(),
 		baseTime,
@@ -156,11 +156,11 @@ func (s *ShoalRollupSuite) TestCloseCampaign() {
 	s.Equal(expectedCreateUserOutput, string(createUserOutput.Notices[0].Payload))
 
 	// create campaign
-	createCampaignInput := []byte(fmt.Sprintf(`{"path":"campaign/creator/create","data":{"title":"test","description":"test","promotion":"test","token":"%s","max_interest_rate":"10","debt_issued":"100000","badge_router":"%s","badge_minter":"%s","closes_at":%d,"maturity_at":%d}}`, token, badgeRouter, badgeMinter, closesAt, maturityAt))
+	createCampaignInput := []byte(fmt.Sprintf(`{"path":"campaign/creator/create","data":{"title":"test","description":"testtesttesttesttest","promotion":"testtesttesttesttest","token":"%s","max_interest_rate":"10","debt_issued":"100000","badge_router":"%s","badge_minter":"%s","closes_at":%d,"maturity_at":%d}}`, token, badgeRouter, badgeMinter, closesAt, maturityAt))
 	createCampaignOutput := s.Tester.DepositERC20(collateral, creator, big.NewInt(10000), createCampaignInput)
 	s.Len(createCampaignOutput.Notices, 1)
 
-	expectedCreateCampaignOutput := fmt.Sprintf(`campaign created - {"id":1,"title":"test","description":"test","promotion":"test","token":"%s","creator":{"id":3,"role":"creator","address":"%s","social_accounts":[{"id":1,"user_id":3,"username":"test","platform":"twitter","created_at":%d}],"created_at":%d},"collateral_address":"%s","collateral_amount":"10000","badge_router":"%s","badge_minter":"%s","debt_issued":"100000","max_interest_rate":"10","state":"ongoing","orders":[],"created_at":%d,"closes_at":%d,"maturity_at":%d}`,
+	expectedCreateCampaignOutput := fmt.Sprintf(`campaign created - {"id":1,"title":"test","description":"testtesttesttesttest","promotion":"testtesttesttesttest","token":"%s","creator":{"id":3,"role":"creator","address":"%s","social_accounts":[{"id":1,"user_id":3,"username":"test","platform":"twitter","created_at":%d}],"created_at":%d,"updated_at":0},"collateral_address":"%s","collateral_amount":"10000","badge_router":"%s","badge_minter":"%s","debt_issued":"100000","max_interest_rate":"10","state":"ongoing","orders":[],"created_at":%d,"closes_at":%d,"maturity_at":%d}`,
 		token.Hex(),
 		creator.Hex(),
 		baseTime,
@@ -197,7 +197,7 @@ func (s *ShoalRollupSuite) TestCloseCampaign() {
 	closeCampaignOutput := s.Tester.Advance(anyone, closeCampaignInput)
 	s.Len(closeCampaignOutput.Notices, 1)
 
-	expectedCloseCampaignOutput := fmt.Sprintf(`campaign closed - {"id":1,"title":"test","description":"test","promotion":"test","token":"%s","creator":{"id":3,"role":"creator","address":"%s","social_accounts":[{"id":1,"user_id":3,"username":"test","platform":"twitter","created_at":%d}],"created_at":%d},"collateral_address":"%s","collateral_amount":"10000","badge_router":"%s","badge_minter":"%s","debt_issued":"100000","max_interest_rate":"10","total_obligation":"108195","total_raised":"100000","state":"closed","orders":[`+
+	expectedCloseCampaignOutput := fmt.Sprintf(`campaign closed - {"id":1,"title":"test","description":"testtesttesttesttest","promotion":"testtesttesttesttest","token":"%s","creator":{"id":3,"role":"creator","address":"%s","social_accounts":[{"id":1,"user_id":3,"username":"test","platform":"twitter","created_at":%d}],"created_at":%d,"updated_at":0},"collateral_address":"%s","collateral_amount":"10000","badge_router":"%s","badge_minter":"%s","debt_issued":"100000","max_interest_rate":"10","total_obligation":"108195","total_raised":"100000","state":"closed","orders":[`+
 		`{"id":1,"campaign_id":1,"badge_chain_selector":"16015286601757825753","investor":"%s","amount":"59500","interest_rate":"9","state":"partially_accepted","created_at":%d,"updated_at":%d},`+
 		`{"id":2,"campaign_id":1,"badge_chain_selector":"16015286601757825753","investor":"%s","amount":"28000","interest_rate":"8","state":"accepted","created_at":%d,"updated_at":%d},`+
 		`{"id":3,"campaign_id":1,"badge_chain_selector":"16015286601757825753","investor":"%s","amount":"2000","interest_rate":"4","state":"accepted","created_at":%d,"updated_at":%d},`+
@@ -380,11 +380,11 @@ func (s *ShoalRollupSuite) TestSettleCampaign() {
 	s.Equal(expectedCreateUserOutput, string(createUserOutput.Notices[0].Payload))
 
 	// create campaign
-	createCampaignInput := []byte(fmt.Sprintf(`{"path":"campaign/creator/create","data":{"title":"test","description":"test","promotion":"test","token":"%s", "max_interest_rate":"10", "debt_issued":"100000","badge_router":"0x0000000000000000000000000000000000000068", "badge_minter":"0x0000000000000000000000000000000000000069", "closes_at":%d,"maturity_at":%d}}`, token, closesAt, maturityAt))
+	createCampaignInput := []byte(fmt.Sprintf(`{"path":"campaign/creator/create","data":{"title":"test","description":"testtesttesttesttest","promotion":"testtesttesttesttest","token":"%s", "max_interest_rate":"10", "debt_issued":"100000","badge_router":"0x0000000000000000000000000000000000000068", "badge_minter":"0x0000000000000000000000000000000000000069", "closes_at":%d,"maturity_at":%d}}`, token, closesAt, maturityAt))
 	createCampaignOutput := s.Tester.DepositERC20(collateral, creator, big.NewInt(10000), createCampaignInput)
 	s.Len(createCampaignOutput.Notices, 1)
 
-	expectedCreateCampaignOutput := fmt.Sprintf(`campaign created - {"id":1,"title":"test","description":"test","promotion":"test","token":"%s","creator":{"id":3,"role":"creator","address":"%s","social_accounts":[{"id":1,"user_id":3,"username":"test","platform":"twitter","created_at":%d}],"created_at":%d},"collateral_address":"%s","collateral_amount":"10000","badge_router":"%s","badge_minter":"%s","debt_issued":"100000","max_interest_rate":"10","state":"ongoing","orders":[],"created_at":%d,"closes_at":%d,"maturity_at":%d}`,
+	expectedCreateCampaignOutput := fmt.Sprintf(`campaign created - {"id":1,"title":"test","description":"testtesttesttesttest","promotion":"testtesttesttesttest","token":"%s","creator":{"id":3,"role":"creator","address":"%s","social_accounts":[{"id":1,"user_id":3,"username":"test","platform":"twitter","created_at":%d}],"created_at":%d,"updated_at":0},"collateral_address":"%s","collateral_amount":"10000","badge_router":"%s","badge_minter":"%s","debt_issued":"100000","max_interest_rate":"10","state":"ongoing","orders":[],"created_at":%d,"closes_at":%d,"maturity_at":%d}`,
 		token.Hex(),
 		creator.Hex(),
 		baseTime,
@@ -421,7 +421,7 @@ func (s *ShoalRollupSuite) TestSettleCampaign() {
 	closeCampaignOutput := s.Tester.Advance(anyone, closeCampaignInput)
 	s.Len(closeCampaignOutput.Notices, 1)
 
-	expectedCloseCampaignOutput := fmt.Sprintf(`campaign closed - {"id":1,"title":"test","description":"test","promotion":"test","token":"%s","creator":{"id":3,"role":"creator","address":"%s","social_accounts":[{"id":1,"user_id":3,"username":"test","platform":"twitter","created_at":%d}],"created_at":%d},"collateral_address":"%s","collateral_amount":"10000","badge_router":"%s","badge_minter":"%s","debt_issued":"100000","max_interest_rate":"10","total_obligation":"108195","total_raised":"100000","state":"closed","orders":[`+
+	expectedCloseCampaignOutput := fmt.Sprintf(`campaign closed - {"id":1,"title":"test","description":"testtesttesttesttest","promotion":"testtesttesttesttest","token":"%s","creator":{"id":3,"role":"creator","address":"%s","social_accounts":[{"id":1,"user_id":3,"username":"test","platform":"twitter","created_at":%d}],"created_at":%d,"updated_at":0},"collateral_address":"%s","collateral_amount":"10000","badge_router":"%s","badge_minter":"%s","debt_issued":"100000","max_interest_rate":"10","total_obligation":"108195","total_raised":"100000","state":"closed","orders":[`+
 		`{"id":1,"campaign_id":1,"badge_chain_selector":"16015286601757825753","investor":"%s","amount":"59500","interest_rate":"9","state":"partially_accepted","created_at":%d,"updated_at":%d},`+
 		`{"id":2,"campaign_id":1,"badge_chain_selector":"16015286601757825753","investor":"%s","amount":"28000","interest_rate":"8","state":"accepted","created_at":%d,"updated_at":%d},`+
 		`{"id":3,"campaign_id":1,"badge_chain_selector":"16015286601757825753","investor":"%s","amount":"2000","interest_rate":"4","state":"accepted","created_at":%d,"updated_at":%d},`+
@@ -461,7 +461,7 @@ func (s *ShoalRollupSuite) TestSettleCampaign() {
 
 	settledAt := baseTime + 10 // baseTime
 
-	expectedSettleCampaignOutput := fmt.Sprintf(`campaign settled - {"id":1,"title":"test","description":"test","promotion":"test","token":"%s","creator":{"id":3,"role":"creator","address":"%s","social_accounts":[{"id":1,"user_id":3,"username":"test","platform":"twitter","created_at":%d}],"created_at":%d},"collateral_address":"%s","collateral_amount":"10000","badge_router":"%s","badge_minter":"%s","debt_issued":"100000","max_interest_rate":"10","total_obligation":"108195","total_raised":"100000","state":"settled","orders":[`+
+	expectedSettleCampaignOutput := fmt.Sprintf(`campaign settled - {"id":1,"title":"test","description":"testtesttesttesttest","promotion":"testtesttesttesttest","token":"%s","creator":{"id":3,"role":"creator","address":"%s","social_accounts":[{"id":1,"user_id":3,"username":"test","platform":"twitter","created_at":%d}],"created_at":%d,"updated_at":0},"collateral_address":"%s","collateral_amount":"10000","badge_router":"%s","badge_minter":"%s","debt_issued":"100000","max_interest_rate":"10","total_obligation":"108195","total_raised":"100000","state":"settled","orders":[`+
 		`{"id":1,"campaign_id":1,"badge_chain_selector":"16015286601757825753","investor":"%s","amount":"59500","interest_rate":"9","state":"settled","created_at":%d,"updated_at":%d},`+
 		`{"id":2,"campaign_id":1,"badge_chain_selector":"16015286601757825753","investor":"%s","amount":"28000","interest_rate":"8","state":"settled","created_at":%d,"updated_at":%d},`+
 		`{"id":3,"campaign_id":1,"badge_chain_selector":"16015286601757825753","investor":"%s","amount":"2000","interest_rate":"4","state":"settled","created_at":%d,"updated_at":%d},`+
@@ -650,11 +650,11 @@ func (s *ShoalRollupSuite) TestExecuteCampaignCollateral() {
 	s.Equal(expectedCreateUserOutput, string(createUserOutput.Notices[0].Payload))
 
 	// create campaign
-	createCampaignInput := []byte(fmt.Sprintf(`{"path":"campaign/creator/create","data":{"title":"test","description":"test","promotion":"test","token":"%s","max_interest_rate":"10","debt_issued":"100000","badge_router":"%s","badge_minter":"%s","closes_at":%d,"maturity_at":%d}}`, token, badgeRouter, badgeMinter, closesAt, maturityAt))
+	createCampaignInput := []byte(fmt.Sprintf(`{"path":"campaign/creator/create","data":{"title":"test","description":"testtesttesttesttest","promotion":"testtesttesttesttest","token":"%s","max_interest_rate":"10","debt_issued":"100000","badge_router":"%s","badge_minter":"%s","closes_at":%d,"maturity_at":%d}}`, token, badgeRouter, badgeMinter, closesAt, maturityAt))
 	createCampaignOutput := s.Tester.DepositERC20(collateral, creator, big.NewInt(10000), createCampaignInput)
 	s.Len(createCampaignOutput.Notices, 1)
 
-	expectedCreateCampaignOutput := fmt.Sprintf(`campaign created - {"id":1,"title":"test","description":"test","promotion":"test","token":"%s","creator":{"id":3,"role":"creator","address":"%s","social_accounts":[{"id":1,"user_id":3,"username":"test","platform":"twitter","created_at":%d}],"created_at":%d},"collateral_address":"%s","collateral_amount":"10000","badge_router":"%s","badge_minter":"%s","debt_issued":"100000","max_interest_rate":"10","state":"ongoing","orders":[],"created_at":%d,"closes_at":%d,"maturity_at":%d}`,
+	expectedCreateCampaignOutput := fmt.Sprintf(`campaign created - {"id":1,"title":"test","description":"testtesttesttesttest","promotion":"testtesttesttesttest","token":"%s","creator":{"id":3,"role":"creator","address":"%s","social_accounts":[{"id":1,"user_id":3,"username":"test","platform":"twitter","created_at":%d}],"created_at":%d,"updated_at":0},"collateral_address":"%s","collateral_amount":"10000","badge_router":"%s","badge_minter":"%s","debt_issued":"100000","max_interest_rate":"10","state":"ongoing","orders":[],"created_at":%d,"closes_at":%d,"maturity_at":%d}`,
 		token.Hex(),
 		creator.Hex(),
 		baseTime,
@@ -691,7 +691,7 @@ func (s *ShoalRollupSuite) TestExecuteCampaignCollateral() {
 	closeCampaignOutput := s.Tester.Advance(anyone, closeCampaignInput)
 	s.Len(closeCampaignOutput.Notices, 1)
 
-	expectedCloseCampaignOutput := fmt.Sprintf(`campaign closed - {"id":1,"title":"test","description":"test","promotion":"test","token":"%s","creator":{"id":3,"role":"creator","address":"%s","social_accounts":[{"id":1,"user_id":3,"username":"test","platform":"twitter","created_at":%d}],"created_at":%d},"collateral_address":"%s","collateral_amount":"10000","badge_router":"%s","badge_minter":"%s","debt_issued":"100000","max_interest_rate":"10","total_obligation":"108195","total_raised":"100000","state":"closed","orders":[`+
+	expectedCloseCampaignOutput := fmt.Sprintf(`campaign closed - {"id":1,"title":"test","description":"testtesttesttesttest","promotion":"testtesttesttesttest","token":"%s","creator":{"id":3,"role":"creator","address":"%s","social_accounts":[{"id":1,"user_id":3,"username":"test","platform":"twitter","created_at":%d}],"created_at":%d,"updated_at":0},"collateral_address":"%s","collateral_amount":"10000","badge_router":"%s","badge_minter":"%s","debt_issued":"100000","max_interest_rate":"10","total_obligation":"108195","total_raised":"100000","state":"closed","orders":[`+
 		`{"id":1,"campaign_id":1,"badge_chain_selector":"16015286601757825753","investor":"%s","amount":"59500","interest_rate":"9","state":"partially_accepted","created_at":%d,"updated_at":%d},`+
 		`{"id":2,"campaign_id":1,"badge_chain_selector":"16015286601757825753","investor":"%s","amount":"28000","interest_rate":"8","state":"accepted","created_at":%d,"updated_at":%d},`+
 		`{"id":3,"campaign_id":1,"badge_chain_selector":"16015286601757825753","investor":"%s","amount":"2000","interest_rate":"4","state":"accepted","created_at":%d,"updated_at":%d},`+
@@ -728,7 +728,7 @@ func (s *ShoalRollupSuite) TestExecuteCampaignCollateral() {
 	findCampaignByIdOutput := s.Tester.Inspect(findCampaignByIdInput)
 	s.Len(findCampaignByIdOutput.Reports, 1)
 
-	expectedFindCampaignByCreatorOutput := fmt.Sprintf(`[{"id":1,"title":"test","description":"test","promotion":"test","token":"%s","creator":{"id":3,"role":"creator","address":"%s","social_accounts":[{"id":1,"user_id":3,"username":"test","platform":"twitter","created_at":%d}],"created_at":%d},"collateral_address":"%s","collateral_amount":"10000","badge_router":"%s","badge_minter":"%s","debt_issued":"100000","max_interest_rate":"10","total_obligation":"108195","total_raised":"100000","state":"closed","orders":[`+
+	expectedFindCampaignByCreatorOutput := fmt.Sprintf(`[{"id":1,"title":"test","description":"testtesttesttesttest","promotion":"testtesttesttesttest","token":"%s","creator":{"id":3,"role":"creator","address":"%s","social_accounts":[{"id":1,"user_id":3,"username":"test","platform":"twitter","created_at":%d}],"created_at":%d,"updated_at":0},"collateral_address":"%s","collateral_amount":"10000","badge_router":"%s","badge_minter":"%s","debt_issued":"100000","max_interest_rate":"10","total_obligation":"108195","total_raised":"100000","state":"closed","orders":[`+
 		`{"id":1,"campaign_id":1,"badge_chain_selector":"16015286601757825753","investor":"%s","amount":"59500","interest_rate":"9","state":"partially_accepted","created_at":%d,"updated_at":%d},`+
 		`{"id":2,"campaign_id":1,"badge_chain_selector":"16015286601757825753","investor":"%s","amount":"28000","interest_rate":"8","state":"accepted","created_at":%d,"updated_at":%d},`+
 		`{"id":3,"campaign_id":1,"badge_chain_selector":"16015286601757825753","investor":"%s","amount":"2000","interest_rate":"4","state":"accepted","created_at":%d,"updated_at":%d},`+
@@ -765,7 +765,7 @@ func (s *ShoalRollupSuite) TestExecuteCampaignCollateral() {
 
 	collateralExecutedAt := baseTime + 11 // baseTime
 
-	expectedExecuteCampaignCollateralOutput := fmt.Sprintf(`campaign collateral executed - {"id":1,"title":"test","description":"test","promotion":"test","token":"%s","creator":{"id":3,"role":"creator","address":"%s","social_accounts":[{"id":1,"user_id":3,"username":"test","platform":"twitter","created_at":%d}],"created_at":%d},"collateral_address":"%s","collateral_amount":"10000","badge_router":"0x0000000000000000000000000000000000000068","badge_minter":"0x0000000000000000000000000000000000000069","debt_issued":"100000","max_interest_rate":"10","total_obligation":"108195","total_raised":"100000","state":"collateral_executed","orders":[`+
+	expectedExecuteCampaignCollateralOutput := fmt.Sprintf(`campaign collateral executed - {"id":1,"title":"test","description":"testtesttesttesttest","promotion":"testtesttesttesttest","token":"%s","creator":{"id":3,"role":"creator","address":"%s","social_accounts":[{"id":1,"user_id":3,"username":"test","platform":"twitter","created_at":%d}],"created_at":%d,"updated_at":0},"collateral_address":"%s","collateral_amount":"10000","badge_router":"0x0000000000000000000000000000000000000068","badge_minter":"0x0000000000000000000000000000000000000069","debt_issued":"100000","max_interest_rate":"10","total_obligation":"108195","total_raised":"100000","state":"collateral_executed","orders":[`+
 		`{"id":1,"campaign_id":1,"badge_chain_selector":"16015286601757825753","investor":"%s","amount":"59500","interest_rate":"9","state":"settled_by_collateral","created_at":%d,"updated_at":%d},`+
 		`{"id":2,"campaign_id":1,"badge_chain_selector":"16015286601757825753","investor":"%s","amount":"28000","interest_rate":"8","state":"settled_by_collateral","created_at":%d,"updated_at":%d},`+
 		`{"id":3,"campaign_id":1,"badge_chain_selector":"16015286601757825753","investor":"%s","amount":"2000","interest_rate":"4","state":"settled_by_collateral","created_at":%d,"updated_at":%d},`+
@@ -915,11 +915,11 @@ func (s *ShoalRollupSuite) TestFindAllCampaigns() {
 	s.Equal(expectedCreateSocialAccountOutput, string(createSocialAccountOutput.Notices[0].Payload))
 
 	// create campaign
-	createCampaignInput := []byte(fmt.Sprintf(`{"path":"campaign/creator/create","data":{"title":"test","description":"test","promotion":"test","token":"%s","max_interest_rate":"10","debt_issued":"100000","badge_router":"%s","badge_minter":"%s","closes_at":%d,"maturity_at":%d}}`, token, badgeRouter, badgeMinter, closesAt, maturityAt))
+	createCampaignInput := []byte(fmt.Sprintf(`{"path":"campaign/creator/create","data":{"title":"test","description":"testtesttesttesttest","promotion":"testtesttesttesttest","token":"%s","max_interest_rate":"10","debt_issued":"100000","badge_router":"%s","badge_minter":"%s","closes_at":%d,"maturity_at":%d}}`, token, badgeRouter, badgeMinter, closesAt, maturityAt))
 	createCampaignOutput := s.Tester.DepositERC20(collateral, creator, big.NewInt(10000), createCampaignInput)
 	s.Len(createCampaignOutput.Notices, 1)
 
-	expectedCreateCampaignOutput := fmt.Sprintf(`campaign created - {"id":1,"title":"test","description":"test","promotion":"test","token":"%s","creator":{"id":3,"role":"creator","address":"%s","social_accounts":[{"id":1,"user_id":3,"username":"test","platform":"twitter","created_at":%d}],"created_at":%d},"collateral_address":"%s","collateral_amount":"10000","badge_router":"%s","badge_minter":"%s","debt_issued":"100000","max_interest_rate":"10","state":"ongoing","orders":[],"created_at":%d,"closes_at":%d,"maturity_at":%d}`,
+	expectedCreateCampaignOutput := fmt.Sprintf(`campaign created - {"id":1,"title":"test","description":"testtesttesttesttest","promotion":"testtesttesttesttest","token":"%s","creator":{"id":3,"role":"creator","address":"%s","social_accounts":[{"id":1,"user_id":3,"username":"test","platform":"twitter","created_at":%d}],"created_at":%d,"updated_at":0},"collateral_address":"%s","collateral_amount":"10000","badge_router":"%s","badge_minter":"%s","debt_issued":"100000","max_interest_rate":"10","state":"ongoing","orders":[],"created_at":%d,"closes_at":%d,"maturity_at":%d}`,
 		token.Hex(),
 		creator.Hex(),
 		baseTime,
@@ -935,7 +935,7 @@ func (s *ShoalRollupSuite) TestFindAllCampaigns() {
 	findAllCampaignsOutput := s.Tester.Inspect(findAllCampaignsInput)
 	s.Len(findAllCampaignsOutput.Reports, 1)
 
-	expectedFindAllCampaignsOutput := fmt.Sprintf(`[{"id":1,"title":"test","description":"test","promotion":"test","token":"0x0000000000000000000000000000000000000009","creator":{"id":3,"role":"creator","address":"0x0000000000000000000000000000000000000007","social_accounts":[{"id":1,"user_id":3,"username":"test","platform":"twitter","created_at":%d}],"created_at":%d},"collateral_address":"0x0000000000000000000000000000000000000008","collateral_amount":"10000","badge_router":"0x0000000000000000000000000000000000000068","badge_minter":"0x0000000000000000000000000000000000000069","debt_issued":"100000","max_interest_rate":"10","total_obligation":"0","total_raised":"0","state":"ongoing","orders":[],"created_at":%d,"closes_at":%d,"maturity_at":%d,"updated_at":0}]`, baseTime, baseTime, baseTime, closesAt, maturityAt)
+	expectedFindAllCampaignsOutput := fmt.Sprintf(`[{"id":1,"title":"test","description":"testtesttesttesttest","promotion":"testtesttesttesttest","token":"0x0000000000000000000000000000000000000009","creator":{"id":3,"role":"creator","address":"0x0000000000000000000000000000000000000007","social_accounts":[{"id":1,"user_id":3,"username":"test","platform":"twitter","created_at":%d}],"created_at":%d,"updated_at":0},"collateral_address":"0x0000000000000000000000000000000000000008","collateral_amount":"10000","badge_router":"0x0000000000000000000000000000000000000068","badge_minter":"0x0000000000000000000000000000000000000069","debt_issued":"100000","max_interest_rate":"10","total_obligation":"0","total_raised":"0","state":"ongoing","orders":[],"created_at":%d,"closes_at":%d,"maturity_at":%d,"updated_at":0}]`, baseTime, baseTime, baseTime, closesAt, maturityAt)
 	s.Equal(expectedFindAllCampaignsOutput, string(findAllCampaignsOutput.Reports[0].Payload))
 }
 
@@ -969,11 +969,11 @@ func (s *ShoalRollupSuite) TestFindCampaignById() {
 	s.Equal(expectedCreateSocialAccountOutput, string(createSocialAccountOutput.Notices[0].Payload))
 
 	// create campaign
-	createCampaignInput := []byte(fmt.Sprintf(`{"path":"campaign/creator/create","data":{"title":"test","description":"test","promotion":"test","token":"%s","max_interest_rate":"10","debt_issued":"100000","badge_router":"%s","badge_minter":"%s","closes_at":%d,"maturity_at":%d}}`, token, badgeRouter, badgeMinter, closesAt, maturityAt))
+	createCampaignInput := []byte(fmt.Sprintf(`{"path":"campaign/creator/create","data":{"title":"test","description":"testtesttesttesttest","promotion":"testtesttesttesttest","token":"%s","max_interest_rate":"10","debt_issued":"100000","badge_router":"%s","badge_minter":"%s","closes_at":%d,"maturity_at":%d}}`, token, badgeRouter, badgeMinter, closesAt, maturityAt))
 	createCampaignOutput := s.Tester.DepositERC20(collateral, creator, big.NewInt(10000), createCampaignInput)
 	s.Len(createCampaignOutput.Notices, 1)
 
-	expectedCreateCampaignOutput := fmt.Sprintf(`campaign created - {"id":1,"title":"test","description":"test","promotion":"test","token":"%s","creator":{"id":3,"role":"creator","address":"%s","social_accounts":[{"id":1,"user_id":3,"username":"test","platform":"twitter","created_at":%d}],"created_at":%d},"collateral_address":"%s","collateral_amount":"10000","badge_router":"%s","badge_minter":"%s","debt_issued":"100000","max_interest_rate":"10","state":"ongoing","orders":[],"created_at":%d,"closes_at":%d,"maturity_at":%d}`,
+	expectedCreateCampaignOutput := fmt.Sprintf(`campaign created - {"id":1,"title":"test","description":"testtesttesttesttest","promotion":"testtesttesttesttest","token":"%s","creator":{"id":3,"role":"creator","address":"%s","social_accounts":[{"id":1,"user_id":3,"username":"test","platform":"twitter","created_at":%d}],"created_at":%d,"updated_at":0},"collateral_address":"%s","collateral_amount":"10000","badge_router":"%s","badge_minter":"%s","debt_issued":"100000","max_interest_rate":"10","state":"ongoing","orders":[],"created_at":%d,"closes_at":%d,"maturity_at":%d}`,
 		token.Hex(),
 		creator.Hex(),
 		baseTime,
@@ -989,7 +989,7 @@ func (s *ShoalRollupSuite) TestFindCampaignById() {
 	findCampaignByIdOutput := s.Tester.Inspect(findCampaignByIdInput)
 	s.Len(findCampaignByIdOutput.Reports, 1)
 
-	expectedFindCampaignByIdOutput := fmt.Sprintf(`{"id":1,"title":"test","description":"test","promotion":"test","token":"%s","creator":{"id":3,"role":"creator","address":"%s","social_accounts":[{"id":1,"user_id":3,"username":"test","platform":"twitter","created_at":%d}],"created_at":%d},"collateral_address":"%s","collateral_amount":"10000","badge_router":"%s","badge_minter":"%s","debt_issued":"100000","max_interest_rate":"10","total_obligation":"0","total_raised":"0","state":"ongoing","orders":[],"created_at":%d,"closes_at":%d,"maturity_at":%d,"updated_at":0}`,
+	expectedFindCampaignByIdOutput := fmt.Sprintf(`{"id":1,"title":"test","description":"testtesttesttesttest","promotion":"testtesttesttesttest","token":"%s","creator":{"id":3,"role":"creator","address":"%s","social_accounts":[{"id":1,"user_id":3,"username":"test","platform":"twitter","created_at":%d}],"created_at":%d,"updated_at":0},"collateral_address":"%s","collateral_amount":"10000","badge_router":"%s","badge_minter":"%s","debt_issued":"100000","max_interest_rate":"10","total_obligation":"0","total_raised":"0","state":"ongoing","orders":[],"created_at":%d,"closes_at":%d,"maturity_at":%d,"updated_at":0}`,
 		token.Hex(),
 		creator.Hex(),
 		baseTime,
@@ -1031,11 +1031,11 @@ func (s *ShoalRollupSuite) TestFindCampaignsByCreatorAddress() {
 	s.Equal(expectedCreateSocialAccountOutput, string(createSocialAccountOutput.Notices[0].Payload))
 
 	// create campaign
-	createCampaignInput := []byte(fmt.Sprintf(`{"path":"campaign/creator/create","data":{"title":"test","description":"test","promotion":"test","token":"%s","max_interest_rate":"10","debt_issued":"100000","badge_router":"%s","badge_minter":"%s","closes_at":%d,"maturity_at":%d}}`, token, badgeRouter, badgeMinter, closesAt, maturityAt))
+	createCampaignInput := []byte(fmt.Sprintf(`{"path":"campaign/creator/create","data":{"title":"test","description":"testtesttesttesttest","promotion":"testtesttesttesttest","token":"%s","max_interest_rate":"10","debt_issued":"100000","badge_router":"%s","badge_minter":"%s","closes_at":%d,"maturity_at":%d}}`, token, badgeRouter, badgeMinter, closesAt, maturityAt))
 	createCampaignOutput := s.Tester.DepositERC20(collateral, creator, big.NewInt(10000), createCampaignInput)
 	s.Len(createCampaignOutput.Notices, 1)
 
-	expectedCreateCampaignOutput := fmt.Sprintf(`campaign created - {"id":1,"title":"test","description":"test","promotion":"test","token":"%s","creator":{"id":3,"role":"creator","address":"%s","social_accounts":[{"id":1,"user_id":3,"username":"test","platform":"twitter","created_at":%d}],"created_at":%d},"collateral_address":"%s","collateral_amount":"10000","badge_router":"%s","badge_minter":"%s","debt_issued":"100000","max_interest_rate":"10","state":"ongoing","orders":[],"created_at":%d,"closes_at":%d,"maturity_at":%d}`,
+	expectedCreateCampaignOutput := fmt.Sprintf(`campaign created - {"id":1,"title":"test","description":"testtesttesttesttest","promotion":"testtesttesttesttest","token":"%s","creator":{"id":3,"role":"creator","address":"%s","social_accounts":[{"id":1,"user_id":3,"username":"test","platform":"twitter","created_at":%d}],"created_at":%d,"updated_at":0},"collateral_address":"%s","collateral_amount":"10000","badge_router":"%s","badge_minter":"%s","debt_issued":"100000","max_interest_rate":"10","state":"ongoing","orders":[],"created_at":%d,"closes_at":%d,"maturity_at":%d}`,
 		token.Hex(),
 		creator.Hex(),
 		baseTime,
@@ -1051,7 +1051,7 @@ func (s *ShoalRollupSuite) TestFindCampaignsByCreatorAddress() {
 	findCampaignsByCreatorOutput := s.Tester.Inspect(findCampaignsByCreatorInput)
 	s.Len(findCampaignsByCreatorOutput.Reports, 1)
 
-	expectedFindCampaignsByCreatorAddressOutput := fmt.Sprintf(`[{"id":1,"title":"test","description":"test","promotion":"test","token":"0x0000000000000000000000000000000000000009","creator":{"id":3,"role":"creator","address":"0x0000000000000000000000000000000000000007","social_accounts":[{"id":1,"user_id":3,"username":"test","platform":"twitter","created_at":%d}],"created_at":%d},"collateral_address":"0x0000000000000000000000000000000000000008","collateral_amount":"10000","badge_router":"0x0000000000000000000000000000000000000068","badge_minter":"0x0000000000000000000000000000000000000069","debt_issued":"100000","max_interest_rate":"10","total_obligation":"0","total_raised":"0","state":"ongoing","orders":[],"created_at":%d,"closes_at":%d,"maturity_at":%d,"updated_at":0}]`, baseTime, baseTime, baseTime, closesAt, maturityAt)
+	expectedFindCampaignsByCreatorAddressOutput := fmt.Sprintf(`[{"id":1,"title":"test","description":"testtesttesttesttest","promotion":"testtesttesttesttest","token":"0x0000000000000000000000000000000000000009","creator":{"id":3,"role":"creator","address":"0x0000000000000000000000000000000000000007","social_accounts":[{"id":1,"user_id":3,"username":"test","platform":"twitter","created_at":%d}],"created_at":%d,"updated_at":0},"collateral_address":"0x0000000000000000000000000000000000000008","collateral_amount":"10000","badge_router":"0x0000000000000000000000000000000000000068","badge_minter":"0x0000000000000000000000000000000000000069","debt_issued":"100000","max_interest_rate":"10","total_obligation":"0","total_raised":"0","state":"ongoing","orders":[],"created_at":%d,"closes_at":%d,"maturity_at":%d,"updated_at":0}]`, baseTime, baseTime, baseTime, closesAt, maturityAt)
 	s.Equal(expectedFindCampaignsByCreatorAddressOutput, string(findCampaignsByCreatorOutput.Reports[0].Payload))
 }
 
@@ -1128,11 +1128,11 @@ func (s *ShoalRollupSuite) TestFindCampaignsByInvestorAddress() {
 	s.Equal(expectedCreateUserOutput, string(createUserOutput.Notices[0].Payload))
 
 	// create campaign
-	createCampaignInput := []byte(fmt.Sprintf(`{"path":"campaign/creator/create","data":{"title":"test","description":"test","promotion":"test","token":"%s","max_interest_rate":"10","debt_issued":"100000","badge_router":"%s","badge_minter":"%s","closes_at":%d,"maturity_at":%d}}`, token, badgeRouter, badgeMinter, closesAt, maturityAt))
+	createCampaignInput := []byte(fmt.Sprintf(`{"path":"campaign/creator/create","data":{"title":"test","description":"testtesttesttesttest","promotion":"testtesttesttesttest","token":"%s","max_interest_rate":"10","debt_issued":"100000","badge_router":"%s","badge_minter":"%s","closes_at":%d,"maturity_at":%d}}`, token, badgeRouter, badgeMinter, closesAt, maturityAt))
 	createCampaignOutput := s.Tester.DepositERC20(collateral, creator, big.NewInt(10000), createCampaignInput)
 	s.Len(createCampaignOutput.Notices, 1)
 
-	expectedCreateCampaignOutput := fmt.Sprintf(`campaign created - {"id":1,"title":"test","description":"test","promotion":"test","token":"%s","creator":{"id":3,"role":"creator","address":"%s","social_accounts":[{"id":1,"user_id":3,"username":"test","platform":"twitter","created_at":%d}],"created_at":%d},"collateral_address":"%s","collateral_amount":"10000","badge_router":"%s","badge_minter":"%s","debt_issued":"100000","max_interest_rate":"10","state":"ongoing","orders":[],"created_at":%d,"closes_at":%d,"maturity_at":%d}`,
+	expectedCreateCampaignOutput := fmt.Sprintf(`campaign created - {"id":1,"title":"test","description":"testtesttesttesttest","promotion":"testtesttesttesttest","token":"%s","creator":{"id":3,"role":"creator","address":"%s","social_accounts":[{"id":1,"user_id":3,"username":"test","platform":"twitter","created_at":%d}],"created_at":%d,"updated_at":0},"collateral_address":"%s","collateral_amount":"10000","badge_router":"%s","badge_minter":"%s","debt_issued":"100000","max_interest_rate":"10","state":"ongoing","orders":[],"created_at":%d,"closes_at":%d,"maturity_at":%d}`,
 		token.Hex(),
 		creator.Hex(),
 		baseTime,
@@ -1169,7 +1169,7 @@ func (s *ShoalRollupSuite) TestFindCampaignsByInvestorAddress() {
 	closeCampaignOutput := s.Tester.Advance(anyone, closeCampaignInput)
 	s.Len(closeCampaignOutput.Notices, 1)
 
-	expectedCloseCampaignOutput := fmt.Sprintf(`campaign closed - {"id":1,"title":"test","description":"test","promotion":"test","token":"%s","creator":{"id":3,"role":"creator","address":"%s","social_accounts":[{"id":1,"user_id":3,"username":"test","platform":"twitter","created_at":%d}],"created_at":%d},"collateral_address":"%s","collateral_amount":"10000","badge_router":"%s","badge_minter":"%s","debt_issued":"100000","max_interest_rate":"10","total_obligation":"108195","total_raised":"100000","state":"closed","orders":[`+
+	expectedCloseCampaignOutput := fmt.Sprintf(`campaign closed - {"id":1,"title":"test","description":"testtesttesttesttest","promotion":"testtesttesttesttest","token":"%s","creator":{"id":3,"role":"creator","address":"%s","social_accounts":[{"id":1,"user_id":3,"username":"test","platform":"twitter","created_at":%d}],"created_at":%d,"updated_at":0},"collateral_address":"%s","collateral_amount":"10000","badge_router":"%s","badge_minter":"%s","debt_issued":"100000","max_interest_rate":"10","total_obligation":"108195","total_raised":"100000","state":"closed","orders":[`+
 		`{"id":1,"campaign_id":1,"badge_chain_selector":"16015286601757825753","investor":"%s","amount":"59500","interest_rate":"9","state":"partially_accepted","created_at":%d,"updated_at":%d},`+
 		`{"id":2,"campaign_id":1,"badge_chain_selector":"16015286601757825753","investor":"%s","amount":"28000","interest_rate":"8","state":"accepted","created_at":%d,"updated_at":%d},`+
 		`{"id":3,"campaign_id":1,"badge_chain_selector":"16015286601757825753","investor":"%s","amount":"2000","interest_rate":"4","state":"accepted","created_at":%d,"updated_at":%d},`+
@@ -1201,7 +1201,7 @@ func (s *ShoalRollupSuite) TestFindCampaignsByInvestorAddress() {
 	expectedWithdrawRaisedAmountOutput := fmt.Sprintf(`ERC20 withdrawn - token: %s, amount: 100000, user: %s`, token.Hex(), creator.Hex())
 	s.Equal(expectedWithdrawRaisedAmountOutput, string(withdrawRaisedAmountOutput.Notices[0].Payload))
 
-	expectedFindCampaignByCreatorOutput := fmt.Sprintf(`[{"id":1,"title":"test","description":"test","promotion":"test","token":"%s","creator":{"id":3,"role":"creator","address":"%s","social_accounts":[{"id":1,"user_id":3,"username":"test","platform":"twitter","created_at":%d}],"created_at":%d},"collateral_address":"%s","collateral_amount":"10000","badge_router":"%s","badge_minter":"%s","debt_issued":"100000","max_interest_rate":"10","total_obligation":"108195","total_raised":"100000","state":"closed","orders":[`+
+	expectedFindCampaignByCreatorOutput := fmt.Sprintf(`[{"id":1,"title":"test","description":"testtesttesttesttest","promotion":"testtesttesttesttest","token":"%s","creator":{"id":3,"role":"creator","address":"%s","social_accounts":[{"id":1,"user_id":3,"username":"test","platform":"twitter","created_at":%d}],"created_at":%d,"updated_at":0},"collateral_address":"%s","collateral_amount":"10000","badge_router":"%s","badge_minter":"%s","debt_issued":"100000","max_interest_rate":"10","total_obligation":"108195","total_raised":"100000","state":"closed","orders":[`+
 		`{"id":1,"campaign_id":1,"badge_chain_selector":"16015286601757825753","investor":"%s","amount":"59500","interest_rate":"9","state":"partially_accepted","created_at":%d,"updated_at":%d},`+
 		`{"id":2,"campaign_id":1,"badge_chain_selector":"16015286601757825753","investor":"%s","amount":"28000","interest_rate":"8","state":"accepted","created_at":%d,"updated_at":%d},`+
 		`{"id":3,"campaign_id":1,"badge_chain_selector":"16015286601757825753","investor":"%s","amount":"2000","interest_rate":"4","state":"accepted","created_at":%d,"updated_at":%d},`+
