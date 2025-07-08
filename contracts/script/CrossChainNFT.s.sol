@@ -14,7 +14,7 @@ contract CrossChainNFTSourceMinter is Script {
         NFT sourceNFT = new NFT("NFT", "NFT");
         console.log("Source NFT deployed on with address: ", address(sourceNFT));
 
-        // Chain selector for arbitrum sepolia: 16015286601757825753
+        // Chain selector for ethereum sepolia: 16015286601757825753
         address sourceRouter = 0x2a9C5afB0d0e4BAb2BCdaE109EC4b0c4Be15a165;
 
         SourceMinter sourceMinter = new SourceMinter(sourceNFT, sourceRouter);
@@ -52,7 +52,7 @@ contract CrossChainNFTDestinationMinter is Script {
     }
 }
 
-contract SetupApplication is Script { 
+contract SetupApplication is Script {
     SourceMinter sourceMinter;
 
     function run() external {
