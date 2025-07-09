@@ -202,6 +202,10 @@ curl -L https://github.com/henriquemarlon/shoal/releases/download/v0.1.0/shoal-s
 cartesi-rollups-cli deploy application shoal /var/lib/cartesi-rollups-node/snapshots/image --epoch-length 516
 ```
 
+```bash
+docker compose --project-name cartesi-rollups-node exec advancer cartesi-rollups-cli deploy application shoal /var/lib/cartesi-rollups-node/snapshot --epoch-length 720 --self-hosted --salt 0x0000000000000000000000000000000000000000000000000000000000000014 --json
+```
+
 Output:
 
 ```bash

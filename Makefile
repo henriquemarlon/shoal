@@ -8,7 +8,7 @@ define deploy_assets
 	@forge clean --root ./contracts
 	@forge script ./contracts/script/DeployAssets.s.sol \
 		--root ./contracts \
-		--rpc-url $(SEPOLIA_RPC_URL) \
+		--rpc-url $(BLOCKCHAIN_HTTP_ENDPOINT) \
 		--private-key $(PRIVATE_KEY) \
 		--broadcast \
 		-vvv
@@ -20,7 +20,7 @@ define deploy_chainlink
 	@forge clean --root ./contracts
 	@forge script ./contracts/script/CrossChainNFT.s.sol:CrossChainNFTSourceMinter \
 		--root ./contracts \
-		--rpc-url $(SEPOLIA_RPC_URL) \
+		--rpc-url $(BLOCKCHAIN_HTTP_ENDPOINT) \
 		--private-key $(PRIVATE_KEY) \
 		--broadcast \
 		-vvv
@@ -38,7 +38,7 @@ define deploy_vlayer
 	@forge clean --root ./contracts
 	@forge script ./contracts/script/DeployVlayer.s.sol \
 		--root ./contracts \
-		--rpc-url $(SEPOLIA_RPC_URL) \
+		--rpc-url $(BLOCKCHAIN_HTTP_ENDPOINT) \
 		--private-key $(PRIVATE_KEY) \
 		--broadcast \
 		-vvv
@@ -50,19 +50,19 @@ define deploy_delegatecall
 	@forge clean --root ./contracts
 	@forge script ./contracts/script/DeployDelegatecall.s.sol \
 		--root ./contracts \
-		--rpc-url $(SEPOLIA_RPC_URL) \
+		--rpc-url $(BLOCKCHAIN_HTTP_ENDPOINT) \
 		--private-key $(PRIVATE_KEY) \
 		--broadcast \
 		-vvv
 	$(END_LOG)
 endef
 
-define setup_application
+define setup
 	$(START_LOG)
 	@forge clean --root ./contracts
 	@forge script ./contracts/script/CrossChainNFT.s.sol:SetupApplication \
 		--root ./contracts \
-		--rpc-url $(SEPOLIA_RPC_URL) \
+		--rpc-url $(BLOCKCHAIN_HTTP_ENDPOINT) \
 		--private-key $(PRIVATE_KEY) \
 		--broadcast \
 		-vvv
@@ -134,7 +134,7 @@ assets: ## Deploy the assets contracts
 
 .PHONY: setup
 setup: ## Transfers ownership of a deployed SourceMinter contract to the shoal application address
-	@$(setup_application)
+	@$(setup)
 
 .PHONY: help
 help: ## Show help for each of the Makefile recipes

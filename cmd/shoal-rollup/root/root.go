@@ -118,8 +118,8 @@ func NewShoalRollup(repo repository.Repository) *router.Router {
 		// Public operations
 		userGroup.HandleInspect("", handlers.UserInspectHandlers.FindAllUsers)
 		userGroup.HandleInspect("address", handlers.UserInspectHandlers.FindUserByAddress)
-		userGroup.HandleInspect("erc20-balance", handlers.UserInspectHandlers.ERC20BalanceOf)
-		userGroup.HandleAdvance("erc20-withdraw", handlers.UserAdvanceHandlers.ERC20Withdraw)
+		userGroup.HandleInspect("balance", handlers.UserInspectHandlers.ERC20BalanceOf)
+		userGroup.HandleAdvance("withdraw", handlers.UserAdvanceHandlers.ERC20Withdraw)
 	}
 
 	socialGroup := r.Group("social")
